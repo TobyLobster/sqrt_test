@@ -1,0 +1,30 @@
+; http://www.txbobsc.com/aal/1985/aal8506.html#a2
+
+;SAVE S.SQRT16
+;--------------------------------
+       * = $300
+ARG    = $02
+ODD    = $04
+;--------------------------------
+SQRT   LDX ARG+1    ;X = HI BYTE   HI
+       LDY ARG      ;Y = LO BYTE   LO
+       LDA #0       ;START ODD=0
+       STA ODD+1
+l1     STA ODD
+       CLC          ;BORROW ON, SUBTRACT (ODD+1)
+       TYA          ;LO
+       SBC ODD
+       TAY
+       TXA          ;HI
+       SBC ODD+1
+       TAX
+       BCC l2       ;...ODD>REMAINDER, FINISHED
+       LDA ODD      ;CARRY SET, ADD 2 TO ODD
+       ADC #1
+       BCC l1       ;...NEXT
+       INC ODD+1
+       BNE l1       ;...ALWAYS     ...ALWAYS
+l2     LSR ODD+1    ;SQRT IS (ODD/2)
+       ROR ODD
+       RTS
+;--------------------------------

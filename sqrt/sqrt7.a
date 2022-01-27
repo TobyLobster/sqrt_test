@@ -1,0 +1,33 @@
+; http://6502org.wikidot.com/software-math-sqrt
+
+NUML = $02
+NUMH = $03
+ROOT = $04
+REM  = $05
+
+* = $200
+
+start
+   LDA #0
+   STA ROOT
+   STA REM
+   LDX #8
+L1 SEC
+   LDA NUMH
+   SBC #$40
+   TAY
+   LDA REM
+   SBC ROOT
+   BCC L2
+   STY NUMH
+   STA REM
+L2 ROL ROOT
+   ASL NUML
+   ROL NUMH
+   ROL REM
+   ASL NUML
+   ROL NUMH
+   ROL REM
+   DEX
+   BNE L1
+   RTS
