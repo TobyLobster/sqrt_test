@@ -2,6 +2,7 @@
 
 The purpose of this page is to compare the performance of several different implementations of a 16 bit integer square root on the 6502 CPU, to find out which is best.
 This function is sometimes known as isqrt, and conventionally it rounds down the result, so the result fits in 8 bits.
+
 See the Wikipedia page for [integer square root](https://en.wikipedia.org/wiki/Integer_square_root) for details of algorithms.
 
 We execute each routine exhaustively over all 65536 possible inputs, record the cycle count for each and graph the results.
