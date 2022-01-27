@@ -7,6 +7,8 @@ See the Wikipedia page for [integer square root](https://en.wikipedia.org/wiki/I
 We execute each routine exhaustively over all 65536 possible inputs, record the cycle count for each and graph the results.
 
 ### Implementations tested
+All implementations have been sourced from the internet and reformatted for the acme assembler.
+
 | file    | origin                                                    |
 | ------- | --------------------------------------------------------- |
 | sqrt1.a | https://codebase64.org/doku.php?id=base:fast_sqrt         |
@@ -23,12 +25,12 @@ The results are then output to a CSV file for graphing in a spreadsheet.
 
 ### Results
 
-We graph the cycle count of each algorithm over all possible inputs.
+All algorithms proved to be correct. We graph the cycle count of each algorithm over all possible inputs.
 
 ![SQRT Performance Comparison](./sqrt.png)
 
 | file    | average cycle count |
-| ------- | ------------------- |
+| ------- | ------------------: |
 | sqrt1.a | 317.7               |
 | sqrt2.a | 846.5               |
 | sqrt3.a |  43.8               |
@@ -40,5 +42,6 @@ All cycle counts include the final RTS, but not any initial JSR. Add 6 cycles fo
 
 ### Conclusion
 
+It's a speed vs memory trade off.
 If speed is all important and you can afford to use 1K of memory then go with the fastest routine sqrt3.a.
-If you can't afford 1K of memory, then go for the next fastest (and much smaller) sqrt1.a.
+But if you can't afford 1K of memory, then go for the next fastest (and much smaller) sqrt1.a.
