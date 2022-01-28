@@ -139,6 +139,13 @@ def task7_post(mon, symbols, v):
     result = get_memory(mon, symbols["ROOT"])
     return result
 
+def task8_pre(mon, symbols, v):
+    set_memory(mon, symbols["num"], v & 255)
+    set_memory(mon, symbols["num"]+1, v // 256)
+
+def task8_post(mon, symbols, v):
+    return mon._mpu.x
+
 # 1. Add tasks
 add_task("https://codebase64.org/doku.php?id=base:fast_sqrt", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
 add_task("http://www.6502.org/source/integers/root.htm",      "sqrt/sqrt2.a", "SqRoot", task2_pre, task2_post, expect)
@@ -148,6 +155,8 @@ add_task("http://www.txbobsc.com/aal/1986/aal8611.html#a1",   "sqrt/sqrt3.a", "S
 add_task("http://www.txbobsc.com/aal/1986/aal8609.html#a8",   "sqrt/sqrt5.a", "SQR3", task5_pre, task5_post, expect)
 add_task("https://www.bbcelite.com/master/main/subroutine/ll5.html", "sqrt/sqrt6.a", "LL5", task6_pre, task6_post, expect)
 add_task("http://6502org.wikidot.com/software-math-sqrt",     "sqrt/sqrt7.a", "start", task7_pre, task7_post, expect)
+#too slow!
+#add_task("https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
 
 # 2. Run tasks
 spreadsheet = run_tasks()

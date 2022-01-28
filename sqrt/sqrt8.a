@@ -1,0 +1,21 @@
+; https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot
+
+num = $02
+sub = $04
+
+* = $200
+
+sqr                                 ; On entry, !num=input value
+ LDX #1:STX sub+0:DEX:STX sub+1     ; Initialise sub to first subtrand
+                                    ; and initialise X to SQR(0)
+sqr_loop                            ; Repeatedly subtract increasing
+ SEC                                ;   odd numbers until num<0
+ LDA num+0:TAY:SBC sub+0:STA num+0  ; num=num-subtrand, remainder in Y
+ LDA num+1:SBC sub+1:STA num+1
+ BCC sqr_done                       ; num<0, all done
+ INX                                ;
+ LDA sub+0:ADC #1:STA sub+0         ; step +2 to next odd number
+ BCC sqr_loop                       ; no overflow, subtract again
+ INC sub+1:BNE sqr_loop             ; INC high byte and subtract again
+sqr_done
+ RTS                                ; X=root, Y=remainder

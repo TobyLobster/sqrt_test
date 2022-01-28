@@ -1,4 +1,5 @@
 ; https://codebase64.org/doku.php?id=base:fast_sqrt
+; (originally from https://csdb.dk/forums/?roomid=11&topicid=26608&showallposts=1)
 
 MLO     = $02
 MHI     = $03
@@ -8,26 +9,26 @@ result  = $05
     * = $0200
 
 start
-    LDY #$00    ; R = 0
-    LDX #$07
-    CLC         ; clear bit 16 of M
+    LDY #0          ; R = 0
+    LDX #7
+    CLC             ; clear bit 16 of M
 loop
     TYA
     ORA stab-1,X
-    STA THI     ; (R ASL 8) | (D ASL 7)
+    STA THI         ; (R ASL 8) | (D ASL 7)
     LDA MHI
-    BCS skip0   ; M >= 65536? then T <= M is always true
+    BCS skip0       ; M >= 65536? then T <= M is always true
     CMP THI
-    BCC skip1   ; T <= M
+    BCC skip1       ; T <= M
 skip0
     SBC THI
-    STA MHI     ; M = M - T
+    STA MHI         ; M = M - T
     TYA
     ORA stab,x
-    TAY         ; R = R OR D
+    TAY             ; R = R OR D
 skip1
     ASL MLO
-    ROL MHI     ; M = M ASL 1
+    ROL MHI         ; M = M ASL 1
     DEX
     BNE loop
 
@@ -41,7 +42,7 @@ skip1
     SBC THI
     BCC skip3
 skip2
-    INY         ; R = R OR D (D is 1 here)
+    INY             ; R = R OR D (D is 1 here)
 skip3
     RTS
 stab
