@@ -47,4 +47,4 @@ It's a speed vs memory trade off.
 If speed is all important and you can afford to use 1K of memory then go with the fastest routine sqrt3.a.
 But if you can't afford 1K of memory, then go for the next fastest (and much smaller) sqrt1.a.
 
-Note: The fastest routine (sqrt3.a) has two tables of squares (512 bytes, TABLE2 and 3). This cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables of squares.
+Note: The fastest routine (sqrt3.a) has two tables of squares (512 bytes, TABLE2 and 3). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables of squares.
