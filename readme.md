@@ -10,17 +10,19 @@ We execute each routine exhaustively over all 65536 possible inputs, record the 
 ### Implementations tested
 All implementations have been sourced from the internet and reformatted for the acme assembler.
 
-| file    | origin                                                          |
-| ------- | --------------------------------------------------------------- |
-| sqrt1.a | https://codebase64.org/doku.php?id=base:fast_sqrt               |
-| sqrt2.a | http://www.6502.org/source/integers/root.htm                    |
-| sqrt3.a | http://www.txbobsc.com/aal/1986/aal8611.html#a1                 |
-| sqrt5.a | http://www.txbobsc.com/aal/1986/aal8609.html#a8                 |
-| sqrt6.a | https://www.bbcelite.com/master/main/subroutine/ll5.html        |
-| sqrt7.a | http://6502org.wikidot.com/software-math-sqrt                   |
-| sqrt9.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a |
+| file     | origin                                                           |
+| -------- | ---------------------------------------------------------------- |
+| sqrt1.a  | https://codebase64.org/doku.php?id=base:fast_sqrt                |
+| sqrt2.a  | http://www.6502.org/source/integers/root.htm                     |
+| sqrt3.a  | http://www.txbobsc.com/aal/1986/aal8611.html#a1                  |
+| sqrt5.a  | http://www.txbobsc.com/aal/1986/aal8609.html#a8                  |
+| sqrt6.a  | https://www.bbcelite.com/master/main/subroutine/ll5.html         |
+| sqrt7.a  | http://6502org.wikidot.com/software-math-sqrt                    |
+| sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  |
+| sqrt10.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a |
 
 sqrt9.a is my version of sqrt3.a tweaked further for performance.
+sqrt10.a is my version of sqrt1.a tweaked further for performance.
 
 ### Python Script
 After assembling each file using [acme](https://github.com/meonwax/acme), we use [py65mon](https://github.com/mnaberez/py65/blob/master/docs/index.rst) to load and execute the binary 6502, check the results are accurate and record the cycle count.
@@ -32,23 +34,24 @@ All algorithms proved to be correct. We graph the cycle count of each algorithm 
 
 ![SQRT Performance Comparison](./sqrt.png)
 
-| file    | memory (bytes) | worst case cycles | average cycle count |
-| ------- | -------------: | ----------------: | ------------------: |
-| sqrt1.a |             59 |               354 |               317.7 |
-| sqrt2.a |             73 |               923 |               846.5 |
-| sqrt3.a |            796 |               138 |                43.8 |
-| sqrt5.a |             67 |               766 |               731.0 |
-| sqrt6.a |             55 |               574 |               522.9 |
-| sqrt7.a |             42 |               519 |               501.5 |
-| sqrt9.a |            847 |               129 |                39.8 |
+| file     | memory (bytes) | worst case cycles | average cycle count |
+| -------- | -------------: | ----------------: | ------------------: |
+| sqrt1.a  |             59 |               354 |               317.7 |
+| sqrt2.a  |             73 |               923 |               846.5 |
+| sqrt3.a  |            796 |               138 |                43.8 |
+| sqrt5.a  |             67 |               766 |               731.0 |
+| sqrt6.a  |             55 |               574 |               522.9 |
+| sqrt7.a  |             42 |               519 |               501.5 |
+| sqrt9.a  |            847 |               129 |                39.8 |
+| sqrt10.a |            184 |               280 |               244.0 |
 
 All cycle counts include the final RTS, but not any initial JSR. Add 6 cycles for an initial 'JSR sqrt' instruction.
 
 ### Conclusion
 
 It's a speed vs memory trade off.
-* If speed is all important and you can afford to use ~850 bytes of memory then go with the fastest routine sqrt9.a.
-* If you can't afford ~850 bytes of memory, then go for the next fastest (and much smaller at 59 bytes) sqrt1.a.
-* If every byte counts, choose sqrt7.a.
+* If speed is all important and you can afford to use 847 bytes of memory then go with the fastest routine sqrt9.a.
+* If you can't afford 847 bytes of memory, try the next fastest (sqrt10.a at 184 bytes) or the smaller sqrt1.a (59 bytes).
+* If every byte counts, choose sqrt7.a (42 bytes).
 
 Note: The fastest routine (sqrt9.a) has two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables of squares.

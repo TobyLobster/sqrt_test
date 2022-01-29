@@ -1,0 +1,139 @@
+; https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a
+; My tweaking of sqrt1.a, based on https://codebase64.org/doku.php?id=base:fast_sqrt
+
+MLO     = $02
+MHI     = $03
+THI     = $04
+
+    * = $0200
+
+start
+    ldy #0          ; R = 0
+
+    ; first iteration
+
+    lda MHI         ;
+    cmp #$40        ;
+    bcc ++          ;
+    sbc #$40        ;
+    sta MHI         ; M = M - T
+    ldy #$80        ; R = R OR D
+++
+    asl MLO
+    rol MHI         ; M = M ASL 1
+
+    tya
+    ora #$20
+    sta THI         ; (R ASL 8) | (D ASL 7)
+    lda MHI
+    bcs +           ; M >= 65536? then T <= M is always true
+    cmp THI
+    bcc ++          ; T <= M
++
+    sbc THI
+    sta MHI         ; M = M - T
+    tya
+    ora #$40
+    tay             ; R = R OR D
+++
+    asl MLO
+    rol MHI         ; M = M ASL 1
+
+    tya
+    ora #$10
+    sta THI         ; (R ASL 8) | (D ASL 7)
+    lda MHI
+    bcs +           ; M >= 65536? then T <= M is always true
+    cmp THI
+    bcc ++          ; T <= M
++
+    sbc THI
+    sta MHI         ; M = M - T
+    tya
+    ora #$20
+    tay             ; R = R OR D
+++
+    asl MLO
+    rol MHI         ; M = M ASL 1
+
+    tya
+    ora #$08
+    sta THI         ; (R ASL 8) | (D ASL 7)
+    lda MHI
+    bcs +           ; M >= 65536? then T <= M is always true
+    cmp THI
+    bcc ++          ; T <= M
++
+    sbc THI
+    sta MHI         ; M = M - T
+    tya
+    ora #$10
+    tay             ; R = R OR D
+++
+    asl MLO
+    rol MHI         ; M = M ASL 1
+
+    tya
+    ora #$04
+    sta THI         ; (R ASL 8) | (D ASL 7)
+    lda MHI
+    bcs +           ; M >= 65536? then T <= M is always true
+    cmp THI
+    bcc ++          ; T <= M
++
+    sbc THI
+    sta MHI         ; M = M - T
+    tya
+    ora #$08
+    tay             ; R = R OR D
+++
+    asl MLO
+    rol MHI         ; M = M ASL 1
+
+    tya
+    ora #$02
+    sta THI         ; (R ASL 8) | (D ASL 7)
+    lda MHI
+    bcs +           ; M >= 65536? then T <= M is always true
+    cmp THI
+    bcc ++          ; T <= M
++
+    sbc THI
+    sta MHI         ; M = M - T
+    tya
+    ora #$04
+    tay             ; R = R OR D
+++
+    asl MLO
+    rol MHI         ; M = M ASL 1
+
+    tya
+    ora #$01
+    sta THI         ; (R ASL 8) | (D ASL 7)
+    lda MHI
+    bcs +           ; M >= 65536? then T <= M is always true
+    cmp THI
+    bcc ++          ; T <= M
++
+    sbc THI
+    sta MHI         ; M = M - T
+    tya
+    ora #$02
+    tay             ; R = R OR D
+++
+    asl MLO
+    rol MHI         ; M = M ASL 1
+
+    ; last iteration
+
+    bcs +
+    sty THI
+    lda MLO
+    cmp #$80
+    lda MHI
+    sbc THI
+    bcc ++
++
+    iny             ; R = R OR D (D is 1 here)
+++
+    rts

@@ -155,6 +155,15 @@ def task9_post(mon, symbols, v):
     result = mon._mpu.y
     return result
 
+def task10_pre(mon, symbols, v):
+    set_memory(mon, symbols["MLO"], v & 255)
+    set_memory(mon, symbols["MHI"], v // 256)
+
+def task10_post(mon, symbols, v):
+    result = mon._mpu.y
+    return result
+
+
 # 1. Add tasks
 add_task("https://codebase64.org/doku.php?id=base:fast_sqrt", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
 add_task("http://www.6502.org/source/integers/root.htm",      "sqrt/sqrt2.a", "SqRoot", task2_pre, task2_post, expect)
@@ -167,6 +176,7 @@ add_task("http://6502org.wikidot.com/software-math-sqrt",     "sqrt/sqrt7.a", "s
 #too slow!
 #add_task("https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
 add_task("https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a", "sqrt/sqrt9.a", "sqrt16", task9_pre, task9_post, expect)
+add_task("https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a", "sqrt/sqrt10.a", "start", task10_pre, task10_post, expect)
 
 # 2. Run tasks
 spreadsheet = run_tasks()
