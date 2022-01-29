@@ -1,0 +1,253 @@
+; https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a
+
+argsav     =  $02                   ; 2 bytes
+arglo      =  $04                   ; 1 byte
+
+    * = $6085
+
+; ***************************************************************************************
+;
+; sqrt16
+;
+; Heavily based on http://www.txbobsc.com/aal/1986/aal8611.html#a1
+; but reformatted and tweaked to improve performance by TobyLobster
+; Average runtime is 39.84 cycles, worst case 129 cycles.
+;
+; On Entry:
+;   X is high byte of number to SQRT (aka 'arghi')
+;   A is low byte of number to SQRT  (aka 'arglo')
+;
+; On Exit:
+;   Y is result
+;
+; ***************************************************************************************
+sqrt16
+    cpx #$2c                        ; value already 'normalised' (i.e. large enough)?
+    bcs atleast11264                ; ...yes
+
+    ; $0000 to $2bff (11264 cases)
+under11264
+    stx argsav+1                    ; save arghi
+    cpx #0                          ; is arghi zero?
+    beq under256                    ; ...yes
+
+    ; $01ff to $2bff (10752 cases)
+    ; we want to bring the input value into the range of our root table ($2c00-$ffff).
+    ;
+    ; each time around the next loop we multiply the input by 4 (double shift), which
+    ; doubles the result. So we keep track of the number of times we shift twice in Y
+    ; (aka shift_count) so we can scale down the result later.
+    ;
+    ; The loop has been unrolled for speed.
+    sta argsav                      ; save arglo for shifting
+    sta arglo                       ; save arglo for later compare
+    txa                             ; arghi to a
+    ldy #1                          ; Y = shift_count = 1
+
+    asl arglo                       ; }
+    rol                             ; }
+    asl arglo                       ; } shift arglo until >=$2c
+    rol                             ; }
+    cmp #$2c                        ; }
+    bcs normalised                  ; }
+
+    asl arglo                       ; }
+    rol                             ; }
+    asl arglo                       ; } shift arglo until >=$2c
+    rol                             ; }
+    iny                             ; } Y = shift_count = 2
+    cmp #$2c                        ; }
+    bcs normalised                  ; }
+
+    asl arglo                       ; }
+    rol                             ; }
+    asl arglo                       ; } shift arglo until >=$2c
+    rol                             ; }
+    iny                             ; } Y = shift_count = 3
+
+    ; a=normalised arg, y=shift_count
+normalised
+    tax                             ; use norm-arg for index
+    lda root,x                      ; get root from table
+-
+    lsr                             ; halve the root shift_count times
+    dey                             ;
+    bne -                           ;
+
+    ; check our result against actual square from square_low/high as it could be one out
+    tay                             ; use shifted root for index now
+    lda argsav                      ; get arglo
+    cmp square_low,y                ;
+    bcc +                           ; ...speeds up average by 0.7 cycle
+    lda argsav+1                    ;
+    sbc square_high,y               ;
+    bcc +                           ;
+    iny                             ;
++
+    rts                             ;
+
+atleast11264
+    ; $2c00 to $ffff (54272 cases)
+    cpx #$ff                        ; check for arghi = $ff
+    beq over65280                   ; ...yes, special case
+
+    ; if the number is big enough, then we can look up the root in a table indexed by the
+    ; high byte (with the proviso that it may be out by one). We then check against the
+    ; actual squares tables and adjust up by one as needed.
+    ldy root,x                      ; get root, use as index
+    cmp square_low,y                ;
+    bcc return1                     ; ...speeds up average by 0.8 cycle
+    txa                             ; arghi
+    sbc square_high,y               ;
+    bcc return1                     ;
+    iny                             ; adjust result by one
+return1
+    rts                             ;
+
+    ; $0000 to $00ff (256 cases)
+under256
+    tay                             ; is arglo also zero?
+    beq return1                     ; ...yes, sqrt=0
+
+    ; $0001 to $00ff (255 cases)
+    ; As above, we want to bring the input value into the range of our root table ($2c00-$ffff).
+    ;
+    ; each time around the next loop we multiply the input by 4 (double shifted), which
+    ; doubles the result. So we keep track of the number of times we double shifted in Y
+    ; (aka shift_count) so we can scale down the result later.
+    ;
+    ; The loop has been unrolled for speed.
+    ;
+    ; By using arglo (the low byte) as the high byte we have double shifted four
+    ; times already. Hence shift_count starts at four.
+    ;
+    sta argsav                      ; save arglo for later compare
+    ldy #4                          ; start shift_count = 4
+    cmp #$2c                        ; normalised yet?
+    bcs normalised                  ; ...yes, get root now
+    asl                             ;
+    asl                             ;
+    iny                             ; count the shift
+    cmp #$2c                        ; normalised yet?
+    bcs normalised                  ; ...yes, get root now
+    asl                             ;
+    asl                             ;
+    iny                             ; count the shift
+    cmp #$2c                        ; normalised yet?
+    bcs normalised                  ; ...yes, get root now
+    asl                             ;
+    asl                             ;
+    iny                             ; count the shift
+    bne normalised                  ; ALWAYS branch
+
+    ; $ff00 to $ffff (256 cases)
+over65280
+    ldy #$ff                        ;
+    rts                             ;
+
+; align tables to $2c offset from a page, so no page crossings occur
+!align $ff, $2c
+
+; --------------------------------
+; square root of n, for n=11264 to 65280 step 256
+root_table
+    !byte                     $6a, $6b, $6c, $6d
+    !byte $6e, $70, $71, $72, $73, $74, $75, $76
+    !byte $77, $78, $79, $7a, $7b, $7c, $7d, $7e
+    !byte $80, $80, $81, $82, $83, $84, $85, $86
+    !byte $87, $88, $89, $8a, $8b, $8c, $8d, $8e
+    !byte $8f, $90, $90, $91, $92, $93, $94, $95
+    !byte $96, $96, $97, $98, $99, $9a, $9b, $9b
+    !byte $9c, $9d, $9e, $9f, $a0, $a0, $a1, $a2
+    !byte $a3, $a3, $a4, $a5, $a6, $a7, $a7, $a8
+    !byte $a9, $aa, $aa, $ab, $ac, $ad, $ad, $ae
+    !byte $af, $b0, $b0, $b1, $b2, $b2, $b3, $b4
+    !byte $b5, $b5, $b6, $b7, $b7, $b8, $b9, $b9
+    !byte $ba, $bb, $bb, $bc, $bd, $bd, $be, $bf
+    !byte $c0, $c0, $c1, $c1, $c2, $c3, $c3, $c4
+    !byte $c5, $c5, $c6, $c7, $c7, $c8, $c9, $c9
+    !byte $ca, $cb, $cb, $cc, $cc, $cd, $ce, $ce
+    !byte $cf, $d0, $d0, $d1, $d1, $d2, $d3, $d3
+    !byte $d4, $d4, $d5, $d6, $d6, $d7, $d7, $d8
+    !byte $d9, $d9, $da, $da, $db, $db, $dc, $dd
+    !byte $dd, $de, $de, $df, $e0, $e0, $e1, $e1
+    !byte $e2, $e2, $e3, $e3, $e4, $e5, $e5, $e6
+    !byte $e6, $e7, $e7, $e8, $e8, $e9, $ea, $ea
+    !byte $eb, $eb, $ec, $ec, $ed, $ed, $ee, $ee
+    !byte $ef, $f0, $f0, $f1, $f1, $f2, $f2, $f3
+    !byte $f3, $f4, $f4, $f5, $f5, $f6, $f6, $f7
+    !byte $f7, $f8, $f8, $f9, $f9, $fa, $fa, $fb
+    !byte $fb, $fc, $fc, $fd, $fd, $fe, $fe, $ff
+
+root = root_table-$2c    ; set up so $6a is first square root
+
+; Low byte of square of n, for n=1 to 256
+square_low
+    !byte $01, $04, $09, $10, $19, $24, $31, $40
+    !byte $51, $64, $79, $90, $a9, $c4, $e1, $00
+    !byte $21, $44, $69, $90, $b9, $e4, $11, $40
+    !byte $71, $a4, $d9, $10, $49, $84, $c1, $00
+    !byte $41, $84, $c9, $10, $59, $a4, $f1, $40
+    !byte $91, $e4, $39, $90, $e9, $44, $a1, $00
+    !byte $61, $c4, $29, $90, $f9, $64, $d1, $40
+    !byte $b1, $24, $99, $10, $89, $04, $81, $00
+    !byte $81, $04, $89, $10, $99, $24, $b1, $40
+    !byte $d1, $64, $f9, $90, $29, $c4, $61, $00
+    !byte $a1, $44, $e9, $90, $39, $e4, $91, $40
+    !byte $f1, $a4, $59, $10, $c9, $84, $41, $00
+    !byte $c1, $84, $49, $10, $d9, $a4, $71, $40
+    !byte $11, $e4, $b9, $90, $69, $44, $21, $00
+    !byte $e1, $c4, $a9, $90, $79, $64, $51, $40
+    !byte $31, $24, $19, $10, $09, $04, $01, $00
+    !byte $01, $04, $09, $10, $19, $24, $31, $40
+    !byte $51, $64, $79, $90, $a9, $c4, $e1, $00
+    !byte $21, $44, $69, $90, $b9, $e4, $11, $40
+    !byte $71, $a4, $d9, $10, $49, $84, $c1, $00
+    !byte $41, $84, $c9, $10, $59, $a4, $f1, $40
+    !byte $91, $e4, $39, $90, $e9, $44, $a1, $00
+    !byte $61, $c4, $29, $90, $f9, $64, $d1, $40
+    !byte $b1, $24, $99, $10, $89, $04, $81, $00
+    !byte $81, $04, $89, $10, $99, $24, $b1, $40
+    !byte $d1, $64, $f9, $90, $29, $c4, $61, $00
+    !byte $a1, $44, $e9, $90, $39, $e4, $91, $40
+    !byte $f1, $a4, $59, $10, $c9, $84, $41, $00
+    !byte $c1, $84, $49, $10, $d9, $a4, $71, $40
+    !byte $11, $e4, $b9, $90, $69, $44, $21, $00
+    !byte $e1, $c4, $a9, $90, $79, $64, $51, $40
+    !byte $31, $24, $19, $10, $09, $04, $01, $00
+
+; High byte of square of n, for n=1 to 256
+; (Note the last value is $00 instead of $100)
+square_high
+    !byte $00, $00, $00, $00, $00, $00, $00, $00
+    !byte $00, $00, $00, $00, $00, $00, $00, $01
+    !byte $01, $01, $01, $01, $01, $01, $02, $02
+    !byte $02, $02, $02, $03, $03, $03, $03, $04
+    !byte $04, $04, $04, $05, $05, $05, $05, $06
+    !byte $06, $06, $07, $07, $07, $08, $08, $09
+    !byte $09, $09, $0a, $0a, $0a, $0b, $0b, $0c
+    !byte $0c, $0d, $0d, $0e, $0e, $0f, $0f, $10
+    !byte $10, $11, $11, $12, $12, $13, $13, $14
+    !byte $14, $15, $15, $16, $17, $17, $18, $19
+    !byte $19, $1a, $1a, $1b, $1c, $1c, $1d, $1e
+    !byte $1e, $1f, $20, $21, $21, $22, $23, $24
+    !byte $24, $25, $26, $27, $27, $28, $29, $2a
+    !byte $2b, $2b, $2c, $2d, $2e, $2f, $30, $31
+    !byte $31, $32, $33, $34, $35, $36, $37, $38
+    !byte $39, $3a, $3b, $3c, $3d, $3e, $3f, $40
+    !byte $41, $42, $43, $44, $45, $46, $47, $48
+    !byte $49, $4a, $4b, $4c, $4d, $4e, $4f, $51
+    !byte $52, $53, $54, $55, $56, $57, $59, $5a
+    !byte $5b, $5c, $5d, $5f, $60, $61, $62, $64
+    !byte $65, $66, $67, $69, $6a, $6b, $6c, $6e
+    !byte $6f, $70, $72, $73, $74, $76, $77, $79
+    !byte $7a, $7b, $7d, $7e, $7f, $81, $82, $84
+    !byte $85, $87, $88, $8a, $8b, $8d, $8e, $90
+    !byte $91, $93, $94, $96, $97, $99, $9a, $9c
+    !byte $9d, $9f, $a0, $a2, $a4, $a5, $a7, $a9
+    !byte $aa, $ac, $ad, $af, $b1, $b2, $b4, $b6
+    !byte $b7, $b9, $bb, $bd, $be, $c0, $c2, $c4
+    !byte $c5, $c7, $c9, $cb, $cc, $ce, $d0, $d2
+    !byte $d4, $d5, $d7, $d9, $db, $dd, $df, $e1
+    !byte $e2, $e4, $e6, $e8, $ea, $ec, $ee, $f0
+    !byte $f2, $f4, $f6, $f8, $fa, $fc, $fe, $00

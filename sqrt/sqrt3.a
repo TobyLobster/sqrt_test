@@ -20,7 +20,7 @@ NUMBER     =  $04           ; ,03
 ARGSAV     =  $06           ; ,05
 ARGLO      =  $08
 ; --------------------------------
-       * = $6000            ; OUT OF THE WAY
+       * = $60a4            ; OUT OF THE WAY
 ;       .TF SQUARE ROOT.OBJ
 ; --------------------------------
 SQRT
@@ -87,7 +87,7 @@ l9     LDY #$FF
 ;ZZ     =  *-SQRT
 ; --------------------------------
 ;       PUT TABLES SO NO PAGE CROSSING
-        * = ((*+255)/256*256) +64
+!align $ff, $40
 ; --------------------------------
 ;       DON'T WASTE PAPER
 ;       .LIST MOFF

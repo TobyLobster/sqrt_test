@@ -62,9 +62,10 @@ def run_task(name, codefile, start_symbol, pre, post, expect):
 
         oldCycles = mon._mpu.processorCycles
 
-#        set_register(mon, "pc", start)
-#        for i in range(0,200):
-#            mon.do_step("")
+        # DEBUG!
+        # set_register(mon, "pc", start)
+        # for i in range(0,200):
+        #     mon.do_step("")
 
         mon.do_goto(startHexString)
         result = post(mon, symbols, v)
@@ -146,6 +147,14 @@ def task8_pre(mon, symbols, v):
 def task8_post(mon, symbols, v):
     return mon._mpu.x
 
+def task9_pre(mon, symbols, v):
+    mon._mpu.a = v & 255
+    mon._mpu.x = v // 256
+
+def task9_post(mon, symbols, v):
+    result = mon._mpu.y
+    return result
+
 # 1. Add tasks
 add_task("https://codebase64.org/doku.php?id=base:fast_sqrt", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
 add_task("http://www.6502.org/source/integers/root.htm",      "sqrt/sqrt2.a", "SqRoot", task2_pre, task2_post, expect)
@@ -157,6 +166,7 @@ add_task("https://www.bbcelite.com/master/main/subroutine/ll5.html", "sqrt/sqrt6
 add_task("http://6502org.wikidot.com/software-math-sqrt",     "sqrt/sqrt7.a", "start", task7_pre, task7_post, expect)
 #too slow!
 #add_task("https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
+add_task("https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a", "sqrt/sqrt9.a", "sqrt16", task9_pre, task9_post, expect)
 
 # 2. Run tasks
 spreadsheet = run_tasks()

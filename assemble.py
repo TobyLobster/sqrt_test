@@ -3,7 +3,7 @@ import os
 import re
 
 def assemble(code_file, bin_filepath):
-    code = os.system("../tools/acme -o " + bin_filepath + " --symbollist temp.sym " + code_file)
+    code = os.system("../tools/acme -o " + bin_filepath + " -r temp.txt --symbollist temp.sym " + code_file)
     exit_status = os.WEXITSTATUS(code)
     if exit_status != 0:
         print("Assembly failed")
