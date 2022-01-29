@@ -1,4 +1,4 @@
-number,https://codebase64.org/doku.php?id=base:fast_sqrt,http://www.6502.org/source/integers/root.htm,http://www.txbobsc.com/aal/1986/aal8611.html#a1,http://www.txbobsc.com/aal/1986/aal8609.html#a8,https://www.bbcelite.com/master/main/subroutine/ll5.html,http://6502org.wikidot.com/software-math-sqrt,https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a,https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a
+number,sqrt1 (https://codebase64.org/doku.php?id=base:fast_sqrt),sqrt2 (http://www.6502.org/source/integers/root.htm),sqrt3 (http://www.txbobsc.com/aal/1986/aal8611.html#a1),sqrt5 (http://www.txbobsc.com/aal/1986/aal8609.html#a8),sqrt6 (https://www.bbcelite.com/master/main/subroutine/ll5.html),sqrt7 (http://6502org.wikidot.com/software-math-sqrt),sqrt9 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a),sqrt10 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a)
 0,275,754,24,686,496,479,23,213
 1,276,776,138,696,508,484,126,214
 2,276,776,138,696,508,484,126,214

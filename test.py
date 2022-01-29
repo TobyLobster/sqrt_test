@@ -165,18 +165,18 @@ def task10_post(mon, symbols, v):
 
 
 # 1. Add tasks
-add_task("https://codebase64.org/doku.php?id=base:fast_sqrt", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
-add_task("http://www.6502.org/source/integers/root.htm",      "sqrt/sqrt2.a", "SqRoot", task2_pre, task2_post, expect)
-add_task("http://www.txbobsc.com/aal/1986/aal8611.html#a1",   "sqrt/sqrt3.a", "SQRT", task3_pre, task3_post, expect)
+add_task("sqrt1 (https://codebase64.org/doku.php?id=base:fast_sqrt)", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
+add_task("sqrt2 (http://www.6502.org/source/integers/root.htm)",      "sqrt/sqrt2.a", "SqRoot", task2_pre, task2_post, expect)
+add_task("sqrt3 (http://www.txbobsc.com/aal/1986/aal8611.html#a1)",   "sqrt/sqrt3.a", "SQRT", task3_pre, task3_post, expect)
 #too slow!
-#add_task("http://www.txbobsc.com/aal/1985/aal8506.html#a2",   "sqrt/sqrt4.a", "SQRT", task4_pre, task4_post, expect)
-add_task("http://www.txbobsc.com/aal/1986/aal8609.html#a8",   "sqrt/sqrt5.a", "SQR3", task5_pre, task5_post, expect)
-add_task("https://www.bbcelite.com/master/main/subroutine/ll5.html", "sqrt/sqrt6.a", "LL5", task6_pre, task6_post, expect)
-add_task("http://6502org.wikidot.com/software-math-sqrt",     "sqrt/sqrt7.a", "start", task7_pre, task7_post, expect)
+#add_task("sqrt4 (http://www.txbobsc.com/aal/1985/aal8506.html#a2)",   "sqrt/sqrt4.a", "SQRT", task4_pre, task4_post, expect)
+add_task("sqrt5 (http://www.txbobsc.com/aal/1986/aal8609.html#a8)",   "sqrt/sqrt5.a", "SQR3", task5_pre, task5_post, expect)
+add_task("sqrt6 (https://www.bbcelite.com/master/main/subroutine/ll5.html)", "sqrt/sqrt6.a", "LL5", task6_pre, task6_post, expect)
+add_task("sqrt7 (http://6502org.wikidot.com/software-math-sqrt)",     "sqrt/sqrt7.a", "start", task7_pre, task7_post, expect)
 #too slow!
-#add_task("https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
-add_task("https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a", "sqrt/sqrt9.a", "sqrt16", task9_pre, task9_post, expect)
-add_task("https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a", "sqrt/sqrt10.a", "start", task10_pre, task10_post, expect)
+#add_task("sqrt8 (https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot)",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
+add_task("sqrt9 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a)", "sqrt/sqrt9.a", "sqrt16", task9_pre, task9_post, expect)
+add_task("sqrt10 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a)", "sqrt/sqrt10.a", "start", task10_pre, task10_post, expect)
 
 # 2. Run tasks
 spreadsheet = run_tasks()
