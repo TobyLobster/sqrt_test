@@ -55,4 +55,4 @@ It's a speed vs memory trade off.
 * If you can't afford 847 bytes of memory, try sqrt10.a (184 bytes) or sqrt1.a (59 bytes).
 * If every byte counts, choose sqrt7.a (42 bytes).
 
-Note: The fastest routine (sqrt9.a) has two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables of squares.
+Note: The fastest routine (sqrt9.a) has two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
