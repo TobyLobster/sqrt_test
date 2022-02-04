@@ -1,0 +1,149 @@
+;
+
+l   = $02
+r   = $03
+val = $04           ; 2 bytes
+
+* = $0200
+
+; input: 16bit val
+; returns: sqrt of 16bit value in X register
+; base on interative binary search
+; https://www.geeksforgeeks.org/c-program-for-binary-search-recursive-and-iterative/
+sqrt
+    ; we first calculate some quick upper and lower bounds for SQRT
+    ; so we can limit the range of the binary search
+    ldx #0                  ;
+    lda val+1               ;
+    sta l                   ; lower bound for SQRT = floor(val/256)
+    beq setr                ;
+-
+    inx                     ;
+    asl                     ;
+    bcc -                   ;
+setr
+    lda upper_bound,x       ;
+    sta r                   ; upper bound for SQRT based on highest bit set
+    sec                     ;
+
+    ; iterative binary search
+    ; first on the higher byte, then on lower
+loop
+    ;int m = l + (r-l)/2;
+    lda r                   ;
+    sbc l                   ; r-l
+    lsr                     ; /2
+    adc l                   ; add l
+    tax                     ; m is x register
+
+    ; compare squared_table[m] and val (high byte)
+    lda squared_table_hi,x  ;
+    cmp val+1               ;
+    bcc lower               ;
+    beq check_low_byte      ;
+
+    ; higher
+    dex                     ;
+    stx r                   ; r=m-1
+    cpx l                   ;
+    bcs loop                ;  while (l <= r)
+    rts                     ;
+
+check_low_byte
+    ; compare squared_table[m] and val (low byte)
+    lda squared_table_lo,x  ;
+    cmp val                 ;
+    bcc lower               ;
+    beq done                ;
+
+    ; higher
+    dex                     ;
+    stx r                   ; r=m-1
+    cpx l                   ;
+    bcs loop                ;   while (l <= r)
+done
+    rts                     ;
+
+lower
+    inx                     ;
+    beq stop                ;
+    stx l                   ;
+    cpx r                   ; }
+    bcc loop                ; }  while (l <= r)
+    beq loop                ; }
+stop
+    ldx r                   ; we return index in X register
+    rts                     ;
+
+upper_bound
+    !byte 16,255,182,128,91,64,46,32,23
+
+; Low byte of square of n, for n=0 to 255
+squared_table_lo
+    !byte $00, $01, $04, $09, $10, $19, $24, $31, $40
+    !byte $51, $64, $79, $90, $a9, $c4, $e1, $00
+    !byte $21, $44, $69, $90, $b9, $e4, $11, $40
+    !byte $71, $a4, $d9, $10, $49, $84, $c1, $00
+    !byte $41, $84, $c9, $10, $59, $a4, $f1, $40
+    !byte $91, $e4, $39, $90, $e9, $44, $a1, $00
+    !byte $61, $c4, $29, $90, $f9, $64, $d1, $40
+    !byte $b1, $24, $99, $10, $89, $04, $81, $00
+    !byte $81, $04, $89, $10, $99, $24, $b1, $40
+    !byte $d1, $64, $f9, $90, $29, $c4, $61, $00
+    !byte $a1, $44, $e9, $90, $39, $e4, $91, $40
+    !byte $f1, $a4, $59, $10, $c9, $84, $41, $00
+    !byte $c1, $84, $49, $10, $d9, $a4, $71, $40
+    !byte $11, $e4, $b9, $90, $69, $44, $21, $00
+    !byte $e1, $c4, $a9, $90, $79, $64, $51, $40
+    !byte $31, $24, $19, $10, $09, $04, $01, $00
+    !byte $01, $04, $09, $10, $19, $24, $31, $40
+    !byte $51, $64, $79, $90, $a9, $c4, $e1, $00
+    !byte $21, $44, $69, $90, $b9, $e4, $11, $40
+    !byte $71, $a4, $d9, $10, $49, $84, $c1, $00
+    !byte $41, $84, $c9, $10, $59, $a4, $f1, $40
+    !byte $91, $e4, $39, $90, $e9, $44, $a1, $00
+    !byte $61, $c4, $29, $90, $f9, $64, $d1, $40
+    !byte $b1, $24, $99, $10, $89, $04, $81, $00
+    !byte $81, $04, $89, $10, $99, $24, $b1, $40
+    !byte $d1, $64, $f9, $90, $29, $c4, $61, $00
+    !byte $a1, $44, $e9, $90, $39, $e4, $91, $40
+    !byte $f1, $a4, $59, $10, $c9, $84, $41, $00
+    !byte $c1, $84, $49, $10, $d9, $a4, $71, $40
+    !byte $11, $e4, $b9, $90, $69, $44, $21, $00
+    !byte $e1, $c4, $a9, $90, $79, $64, $51, $40
+    !byte $31, $24, $19, $10, $09, $04, $01
+
+; High byte of square of n, for n=0 to 255
+squared_table_hi
+    !byte $00, $00, $00, $00, $00, $00, $00, $00, $00
+    !byte $00, $00, $00, $00, $00, $00, $00, $01
+    !byte $01, $01, $01, $01, $01, $01, $02, $02
+    !byte $02, $02, $02, $03, $03, $03, $03, $04
+    !byte $04, $04, $04, $05, $05, $05, $05, $06
+    !byte $06, $06, $07, $07, $07, $08, $08, $09
+    !byte $09, $09, $0a, $0a, $0a, $0b, $0b, $0c
+    !byte $0c, $0d, $0d, $0e, $0e, $0f, $0f, $10
+    !byte $10, $11, $11, $12, $12, $13, $13, $14
+    !byte $14, $15, $15, $16, $17, $17, $18, $19
+    !byte $19, $1a, $1a, $1b, $1c, $1c, $1d, $1e
+    !byte $1e, $1f, $20, $21, $21, $22, $23, $24
+    !byte $24, $25, $26, $27, $27, $28, $29, $2a
+    !byte $2b, $2b, $2c, $2d, $2e, $2f, $30, $31
+    !byte $31, $32, $33, $34, $35, $36, $37, $38
+    !byte $39, $3a, $3b, $3c, $3d, $3e, $3f, $40
+    !byte $41, $42, $43, $44, $45, $46, $47, $48
+    !byte $49, $4a, $4b, $4c, $4d, $4e, $4f, $51
+    !byte $52, $53, $54, $55, $56, $57, $59, $5a
+    !byte $5b, $5c, $5d, $5f, $60, $61, $62, $64
+    !byte $65, $66, $67, $69, $6a, $6b, $6c, $6e
+    !byte $6f, $70, $72, $73, $74, $76, $77, $79
+    !byte $7a, $7b, $7d, $7e, $7f, $81, $82, $84
+    !byte $85, $87, $88, $8a, $8b, $8d, $8e, $90
+    !byte $91, $93, $94, $96, $97, $99, $9a, $9c
+    !byte $9d, $9f, $a0, $a2, $a4, $a5, $a7, $a9
+    !byte $aa, $ac, $ad, $af, $b1, $b2, $b4, $b6
+    !byte $b7, $b9, $bb, $bd, $be, $c0, $c2, $c4
+    !byte $c5, $c7, $c9, $cb, $cc, $ce, $d0, $d2
+    !byte $d4, $d5, $d7, $d9, $db, $dd, $df, $e1
+    !byte $e2, $e4, $e6, $e8, $ea, $ec, $ee, $f0
+    !byte $f2, $f4, $f6, $f8, $fa, $fc, $fe

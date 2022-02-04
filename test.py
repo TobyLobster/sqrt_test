@@ -6,6 +6,9 @@ import time
 import math
 from pathlib import Path
 
+# py65mon source is here: https://github.com/mnaberez/py65/blob/master/py65/monitor.py
+
+
 tasks = []
 
 def add_task(name, file, start_symbol, pre, post, expect):
@@ -63,9 +66,10 @@ def run_task(name, codefile, start_symbol, pre, post, expect):
         oldCycles = mon._mpu.processorCycles
 
         # DEBUG!
-        # set_register(mon, "pc", start)
-        # for i in range(0,200):
-        #     mon.do_step("")
+        #set_register(mon, "pc", start)
+        #for i in range(0,200):
+        #    mon.do_step("")
+        #    mon.onecmd("registers")
 
         mon.do_goto(startHexString)
         result = post(mon, symbols, v)
@@ -163,6 +167,14 @@ def task10_post(mon, symbols, v):
     result = mon._mpu.y
     return result
 
+def task11_pre(mon, symbols, v):
+    set_memory(mon, symbols["val"], v & 255)
+    set_memory(mon, symbols["val"]+1, v // 256)
+
+def task11_post(mon, symbols, v):
+    result = mon._mpu.x
+    return result
+
 
 # 1. Add tasks
 add_task("sqrt1 (https://codebase64.org/doku.php?id=base:fast_sqrt)", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
@@ -177,6 +189,7 @@ add_task("sqrt7 (http://6502org.wikidot.com/software-math-sqrt)",     "sqrt/sqrt
 #add_task("sqrt8 (https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot)",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
 add_task("sqrt9 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a)", "sqrt/sqrt9.a", "sqrt16", task9_pre, task9_post, expect)
 add_task("sqrt10 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a)", "sqrt/sqrt10.a", "start", task10_pre, task10_post, expect)
+add_task("sqrt11 (http://forum.6502.org/viewtopic.php?p=90611#p90611)", "sqrt/sqrt11.a", "sqrt", task11_pre, task11_post, expect)
 
 # 2. Run tasks
 spreadsheet = run_tasks()
