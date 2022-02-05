@@ -1,4 +1,7 @@
+; https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt11.a
 ;
+; based on http://forum.6502.org/viewtopic.php?p=90611#p90611
+; then tweaked to improve performance
 
 l   = $02
 r   = $03
