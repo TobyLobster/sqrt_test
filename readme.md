@@ -10,14 +10,14 @@ We execute each routine exhaustively over all 65536 possible inputs, record the 
 ### Implementations tested
 All implementations have been sourced from the internet and reformatted for the acme assembler. See [here](https://github.com/TobyLobster/sqrt_test/tree/main/sqrt) for the actual files.
 
-| file     | origin                                                           | notes                   |
-| -------- | ---------------------------------------------------------------- | ----------------------- |
-| sqrt1.a  | https://codebase64.org/doku.php?id=base:fast_sqrt                |                         |
-| sqrt2.a  | http://www.6502.org/source/integers/root.htm                     |                         |
-| sqrt3.a  | http://www.txbobsc.com/aal/1986/aal8611.html#a1                  | a table based solution. |
-| sqrt5.a  | http://www.txbobsc.com/aal/1986/aal8609.html#a8                  |                         |
-| sqrt6.a  | https://www.bbcelite.com/master/main/subroutine/ll5.html         |                         |
-| sqrt7.a  | http://6502org.wikidot.com/software-math-sqrt                    |                         |
+| file     | origin                                                           | notes                                          |
+| -------- | ---------------------------------------------------------------- | ---------------------------------------------- |
+| sqrt1.a  | https://codebase64.org/doku.php?id=base:fast_sqrt                |                                                |
+| sqrt2.a  | http://www.6502.org/source/integers/root.htm                     |                                                |
+| sqrt3.a  | http://www.txbobsc.com/aal/1986/aal8611.html#a1                  | a table based solution.                        |
+| sqrt5.a  | http://www.txbobsc.com/aal/1986/aal8609.html#a8                  |                                                |
+| sqrt6.a  | https://www.bbcelite.com/master/main/subroutine/ll5.html         | from the BBC Micro game Elite.                 |
+| sqrt7.a  | http://6502org.wikidot.com/software-math-sqrt                    |                                                |
 | sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  | my version of sqrt3.a tweaked for performance. |
 | sqrt10.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a | my version of sqrt1.a tweaked for performance. |
 
