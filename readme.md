@@ -18,7 +18,7 @@ All implementations have been sourced from the internet and reformatted for the 
 | sqrt5.a  | http://www.txbobsc.com/aal/1986/aal8609.html#a8                  |                         |
 | sqrt6.a  | https://www.bbcelite.com/master/main/subroutine/ll5.html         |                         |
 | sqrt7.a  | http://6502org.wikidot.com/software-math-sqrt                    |                         |
-| sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  | table based solution, my version of sqrt3.a tweaked for performance. |
+| sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  | my version of sqrt3.a tweaked for performance. |
 | sqrt10.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a | my version of sqrt1.a tweaked for performance. |
 
 ### Python Script
