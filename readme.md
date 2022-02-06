@@ -8,7 +8,7 @@ See the Wikipedia page for [integer square root](https://en.wikipedia.org/wiki/I
 We execute each routine exhaustively over all 65536 possible inputs, record the cycle count for each and graph the results.
 
 ### Implementations tested
-All implementations have been sourced from the internet and reformatted for the acme assembler.
+All implementations have been sourced from the internet and reformatted for the acme assembler. See https://github.com/TobyLobster/sqrt_test/tree/main/sqrt for the actual files.
 
 | file     | origin                                                           |
 | -------- | ---------------------------------------------------------------- |
@@ -55,4 +55,4 @@ It's a speed vs memory trade off.
 * If you can't afford 847 bytes of memory, try sqrt10.a (169 bytes) or sqrt1.a (59 bytes).
 * If every byte counts, choose sqrt7.a (42 bytes).
 
-Note: The fastest routine (sqrt9.a) has two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
+Note: The fastest routines are table based (e.g. sqrt9.a) and have two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
