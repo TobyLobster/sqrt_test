@@ -21,8 +21,6 @@ All implementations have been sourced from the internet and reformatted for the 
 | sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  | table based solution, my version of sqrt3.a tweaked for performance. |
 | sqrt10.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a | my version of sqrt1.a tweaked for performance. |
 
-sqrt10.a is 
-
 ### Python Script
 After assembling each file using [acme](https://github.com/meonwax/acme), we use [py65mon](https://github.com/mnaberez/py65/blob/master/docs/index.rst) to load and execute the binary 6502, check the results are accurate and record the cycle count.
 The results are then output to a CSV file for graphing in a spreadsheet.
