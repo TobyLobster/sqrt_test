@@ -8,22 +8,20 @@ See the Wikipedia page for [integer square root](https://en.wikipedia.org/wiki/I
 We execute each routine exhaustively over all 65536 possible inputs, record the cycle count for each and graph the results.
 
 ### Implementations tested
-All implementations have been sourced from the internet and reformatted for the acme assembler. See https://github.com/TobyLobster/sqrt_test/tree/main/sqrt for the actual files.
+All implementations have been sourced from the internet and reformatted for the acme assembler. See [here](https://github.com/TobyLobster/sqrt_test/tree/main/sqrt) for the actual files.
 
-| file     | origin                                                           |
-| -------- | ---------------------------------------------------------------- |
-| sqrt1.a  | https://codebase64.org/doku.php?id=base:fast_sqrt                |
-| sqrt2.a  | http://www.6502.org/source/integers/root.htm                     |
-| sqrt3.a  | http://www.txbobsc.com/aal/1986/aal8611.html#a1                  |
-| sqrt5.a  | http://www.txbobsc.com/aal/1986/aal8609.html#a8                  |
-| sqrt6.a  | https://www.bbcelite.com/master/main/subroutine/ll5.html         |
-| sqrt7.a  | http://6502org.wikidot.com/software-math-sqrt                    |
-| sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  |
-| sqrt10.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a |
+| file     | origin                                                           | notes                   |
+| -------- | ---------------------------------------------------------------- | ----------------------- |
+| sqrt1.a  | https://codebase64.org/doku.php?id=base:fast_sqrt                |                         |
+| sqrt2.a  | http://www.6502.org/source/integers/root.htm                     |                         |
+| sqrt3.a  | http://www.txbobsc.com/aal/1986/aal8611.html#a1                  | a table based solution. |
+| sqrt5.a  | http://www.txbobsc.com/aal/1986/aal8609.html#a8                  |                         |
+| sqrt6.a  | https://www.bbcelite.com/master/main/subroutine/ll5.html         |                         |
+| sqrt7.a  | http://6502org.wikidot.com/software-math-sqrt                    |                         |
+| sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  | table based solution, my version of sqrt3.a tweaked for performance. |
+| sqrt10.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a | my version of sqrt1.a tweaked for performance. |
 
-sqrt9.a is my version of sqrt3.a tweaked for performance.
-
-sqrt10.a is my version of sqrt1.a tweaked for performance.
+sqrt10.a is 
 
 ### Python Script
 After assembling each file using [acme](https://github.com/meonwax/acme), we use [py65mon](https://github.com/mnaberez/py65/blob/master/docs/index.rst) to load and execute the binary 6502, check the results are accurate and record the cycle count.
