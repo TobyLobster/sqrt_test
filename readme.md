@@ -18,8 +18,11 @@ All implementations have been sourced from the internet and reformatted for the 
 | sqrt5.a  | http://www.txbobsc.com/aal/1986/aal8609.html#a8                  |                                                |
 | sqrt6.a  | https://www.bbcelite.com/master/main/subroutine/ll5.html         | from the BBC Micro game Elite.                 |
 | sqrt7.a  | http://6502org.wikidot.com/software-math-sqrt                    |                                                |
-| sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  | my version of sqrt3.a tweaked for performance. |
+| sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  | a table based solution, my version of sqrt3.a tweaked for performance. |
 | sqrt10.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a | my version of sqrt1.a tweaked for performance. |
+| sqrt11.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt11.a | a table based solution, using binary search. from [here](http://forum.6502.org/viewtopic.php?p=90611#p90611) fixed and tweaked for performance. |
+
+I've omitted implementations sqrt4.a and sqrt8.a as they calculate squares by adding successive odd numbers. This turns out to be extremely slow for anything but small numbers.
 
 ### Python Script
 After assembling each file using [acme](https://github.com/meonwax/acme), we use [py65mon](https://github.com/mnaberez/py65/blob/master/docs/index.rst) to load and execute the binary 6502, check the results are accurate and record the cycle count.
@@ -27,7 +30,7 @@ The results are then output to a CSV file for graphing in a spreadsheet.
 
 ### Results
 
-All algorithms proved to be correct. We graph the cycle count of each algorithm over all possible inputs.
+All algorithms provide the correct results. We graph the cycle count of each algorithm over all possible inputs.
 
 ![SQRT Performance Comparison](./sqrt.png)
 
@@ -41,6 +44,7 @@ All algorithms proved to be correct. We graph the cycle count of each algorithm 
 | sqrt7.a  |             42 |               519 |               501.5 |
 | sqrt9.a  |            847 |               129 |                39.8 |
 | sqrt10.a |            169 |               262 |               229.7 |
+| sqrt11.a |            595 |               333 |               268.8 |
 
 All cycle counts include the final RTS, but not any initial JSR. Add 6 cycles for an initial 'JSR sqrt' instruction.
 
