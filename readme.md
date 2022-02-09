@@ -54,5 +54,6 @@ It's a speed vs memory trade off.
 * If speed is all important and you can afford 847 bytes of memory then use the fastest routine sqrt9.a.
 * If you can't afford 847 bytes of memory, try sqrt10.a (168 bytes) or sqrt1.a (59 bytes).
 * If every byte counts, choose sqrt7.a (42 bytes).
+* If every byte REALLY REALLY counts, choose sqrt4.a (36 bytes), but be aware that it's **ten** times slower than sqrt7.a, and **twenty two** times slower than sqrt10.a.
 
 Note: The fastest routines are table based (e.g. sqrt9.a) and have two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
