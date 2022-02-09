@@ -15,11 +15,11 @@ start
     cmp #$40        ;
     bcc ++          ;
     sbc #$40        ;
-    sta MHI         ; M = M - T
     ldy #$80        ; R = R OR D
 ++
     asl MLO         ;
-    rol MHI         ; M = M ASL 1
+    rol             ; M = M ASL 1
+    sta MHI         ; M = M - T
 
     ; iteration two
     tya             ;

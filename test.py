@@ -73,12 +73,14 @@ def run_task(name, codefile, start_symbol, pre, post, expect):
 
         mon.do_goto(startHexString)
         result = post(mon, symbols, v)
-        expected = expect(v)
 
         if (v % 10000) == 0:
             print("progress " + str(v))
-        if result != expected:
-            print("FAILED. For value " + str(v) + " expected result " + str(expected) + " but got " + str(result))
+
+        if expect:
+            expected = expect(v)
+            if result != expected:
+                print("FAILED. For value " + str(v) + " expected result " + str(expected) + " but got " + str(result))
 
         cycles[v] = mon._mpu.processorCycles - oldCycles
     end_time = time.perf_counter()
@@ -175,6 +177,14 @@ def task11_post(mon, symbols, v):
     result = mon._mpu.x
     return result
 
+#def taskadc1_pre(mon, symbols, v):
+#    set_memory(mon, symbols["mem1"], v & 255)
+#    set_memory(mon, symbols["mem2"], v // 256)
+#
+#def taskadc1_post(mon, symbols, v):
+#    flags[v] = mon._mpu.p
+#    return 0
+
 
 # 1. Add tasks
 add_task("sqrt1 (https://codebase64.org/doku.php?id=base:fast_sqrt)", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
@@ -191,10 +201,30 @@ add_task("sqrt9 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a
 add_task("sqrt10 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a)", "sqrt/sqrt10.a", "start", task10_pre, task10_post, expect)
 add_task("sqrt11 (http://forum.6502.org/viewtopic.php?p=90611#p90611)", "sqrt/sqrt11.a", "sqrt", task11_pre, task11_post, expect)
 
+#flags = [0] * 65536
+#add_task("adc1", "sqrt/adc1.a", "adc1", taskadc1_pre, taskadc1_post, None)
+
 # 2. Run tasks
 spreadsheet = run_tasks()
 
 # 3. Write out results
+#with open("results.csv", "w") as file:
+#    file.write("overflow flag,")
+#    for x in range(0,256):
+#        if x != 0:
+#            file.write(",")
+#        file.write(str(x))
+#
+#    for v in range(0,65536):
+#        x = v & 255
+#        y = v // 256
+#        if x == 0:
+#            file.write("\n" + str(y) + ",")
+#        if x != 0:
+#            file.write(",")
+#        file.write(str((flags[v] & 1)//1))
+
+
 with open("results.csv", "w") as file:
     i = 0
     file.write("number")
