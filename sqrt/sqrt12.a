@@ -1,0 +1,56 @@
+; SQRT from Acornsoft Meteors (https://gitlab.riscosopen.org/RiscOS/Sources/Apps/Diversions/Meteors/-/blob/master/Srce6502/MetSrc2#L961)
+
+_z = $02
+_a = $04
+temp = $08
+
+* = $0200
+
+squareroot
+    lda #0
+    sta _z
+    sta _z+1
+    sta temp
+    sta _a+2
+    sta _a+3
+    lda #$80
+    sta temp+1
+sqloop
+    asl _a
+    rol _a+1
+    rol _a+2
+    rol _a+3
+    sec
+    lda _a+2
+    sbc temp
+    tay
+    lda _a+3
+    sbc temp+1
+    tax
+    bcc nosq
+    tya
+    sbc _z
+    tay
+    txa
+    sbc _z+1
+    tax
+    bcc nosq
+    tya
+    sbc _z
+    tay
+    txa
+    sbc _z+1
+    bcc nosq
+    sta _a+3
+    sty _a+2
+    lda _z
+    ora temp
+    sta _z
+    lda _z+1
+    ora temp+1
+    sta _z+1
+nosq
+    lsr temp+1
+    ror temp
+    bcc sqloop
+    rts
