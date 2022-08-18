@@ -62,4 +62,4 @@ It's a speed vs memory trade off.
 
 The orange dots are good candidates to use. The grey dots are the also-rans, don't choose these because there are faster and smaller versions in orange.
 
-Note: The fastest routines are table based (e.g. sqrt9.a) and have two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
+Note: The fastest routines (sqrt9 and sqrt3) are table based and have two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
