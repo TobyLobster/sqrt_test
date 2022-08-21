@@ -1,0 +1,111 @@
+; from hexwab (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)
+
+in_lo     = $02
+* = $200
+
+; input in X (high byte) and in_lo (low byte)
+; result in A
+; bytes: 141
+; cycles: best 38, avg 265, worst 492
+sqrt13
+	txa
+	bne lo
+do_lo
+	lda in_lo
+	; fall through
+lo
+	cmp #8*8
+	bcc a0
+a1
+	cmp #12*12
+	bcc a10
+a11
+	cmp #14*14
+	bcc a110
+a111
+	cmp #15*15
+	lda #7
+	bne resume
+a110
+	cmp #13*13
+	lda #6
+	bne resume
+a10
+	cmp #10*10
+	bcc a100
+a101
+	cmp #11*11
+	lda #5
+	bne resume
+a100	cmp #9*9
+	lda #4
+	bne resume
+a0
+	cmp #4*4
+	bcc a00
+a01
+	cmp #6*6
+	bcc a010
+a011
+	cmp #7*7
+	lda #3
+	bne resume
+a010
+	cmp #5*5
+	lda #2
+	bne resume
+a00
+	cmp #2*2
+	bcc a000
+a001
+	cmp #3*3
+	lda #1
+	bne resume
+a000
+	cmp #1*1
+	lda #0
+resume
+	rol
+	cpx #0
+	bne cont
+	rts
+cont
+	tay
+	; result should be $pq. we have $p0
+	txa
+	sec
+	sbc sqtab-1,Y
+	tax
+	tya
+	asl
+	asl
+	asl
+	asl
+	eor #$ff
+	tay
+	sec
+	bpl loop3
+loop
+	asl
+loop2
+	; A is increment = result*2+1
+	adc in_lo
+	sta in_lo
+	bcs +
+	dex
+	bmi done
+	sec
++
+	dey
+	tya
+	bmi loop
+loop3	rol
+	dex
+	bpl loop2
+done
+	tya
+	eor #$ff
+	rts
+
+sqtab
+    !byte 1,4,9,16,25,36,49,64,81,100,121,144,169,196,225

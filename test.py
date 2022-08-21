@@ -58,10 +58,18 @@ def run_task(name, codefile, start_symbol, pre, post, expect):
 
     mon = Monitor()
     mon.do_load("./TESTME $" + startHexString)
+
     start_time = time.perf_counter()
     cycles = {}
     for v in range(0,65536):
         pre(mon, symbols, v)
+
+        # HACK - make sure when we execute the final RTS, we return to $ffff, where a
+        # BRK instruction ends the test. Hopefully there was no code there!
+        set_memory(mon, 0xffff, 0)      # BRK instruction
+        set_memory(mon, 0x1fe, 0xfe)    # Put $fffe on the stack so RTS returns to memory location $FFFF
+        set_memory(mon, 0x1ff, 0xff)
+        mon._mpu.sp = 253               # Set stack pointer
 
         oldCycles = mon._mpu.processorCycles
 
@@ -188,6 +196,32 @@ def task12_post(mon, symbols, v):
     result = get_memory(mon, symbols["_z"])
     return result
 
+def task13_pre(mon, symbols, v):
+    set_memory(mon, symbols["in_lo"], v & 255)
+    mon._mpu.x = v // 256
+
+def task13_post(mon, symbols, v):
+    result = mon._mpu.a
+    return result
+
+def task14_pre(mon, symbols, v):
+    set_memory(mon, symbols["in_lo"], v & 255)
+    mon._mpu.x = v // 256
+
+def task14_post(mon, symbols, v):
+    result = mon._mpu.a
+    return result
+
+def task15_pre(mon, symbols, v):
+    mon._mpu.a = v & 255
+    mon._mpu.x = v // 256
+
+def task15_post(mon, symbols, v):
+    result = mon._mpu.a
+    return result
+
+
+
 #def taskadc1_pre(mon, symbols, v):
 #    set_memory(mon, symbols["mem1"], v & 255)
 #    set_memory(mon, symbols["mem2"], v // 256)
@@ -198,22 +232,25 @@ def task12_post(mon, symbols, v):
 
 
 # 1. Add tasks
-#add_task("sqrt1 (https://codebase64.org/doku.php?id=base:fast_sqrt)", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
-#add_task("sqrt2 (http://www.6502.org/source/integers/root.htm)",      "sqrt/sqrt2.a", "SqRoot", task2_pre, task2_post, expect)
-#add_task("sqrt3 (http://www.txbobsc.com/aal/1986/aal8611.html#a1)",   "sqrt/sqrt3.a", "SQRT", task3_pre, task3_post, expect)
+add_task("sqrt1 (https://codebase64.org/doku.php?id=base:fast_sqrt)", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
+add_task("sqrt2 (http://www.6502.org/source/integers/root.htm)",      "sqrt/sqrt2.a", "SqRoot", task2_pre, task2_post, expect)
+add_task("sqrt3 (http://www.txbobsc.com/aal/1986/aal8611.html#a1)",   "sqrt/sqrt3.a", "SQRT", task3_pre, task3_post, expect)
 #too slow!
 #add_task("sqrt4 (http://www.txbobsc.com/aal/1985/aal8506.html#a2)",   "sqrt/sqrt4.a", "sqrt", task4_pre, task4_post, expect)
-#add_task("sqrt5 (http://www.txbobsc.com/aal/1986/aal8609.html#a8)",   "sqrt/sqrt5.a", "SQR3", task5_pre, task5_post, expect)
-#add_task("sqrt6 (https://www.bbcelite.com/master/main/subroutine/ll5.html)", "sqrt/sqrt6.a", "LL5", task6_pre, task6_post, expect)
-#add_task("sqrt7 (http://6502org.wikidot.com/software-math-sqrt)",     "sqrt/sqrt7.a", "start", task7_pre, task7_post, expect)
+add_task("sqrt5 (http://www.txbobsc.com/aal/1986/aal8609.html#a8)",   "sqrt/sqrt5.a", "SQR3", task5_pre, task5_post, expect)
+add_task("sqrt6 (https://www.bbcelite.com/master/main/subroutine/ll5.html)", "sqrt/sqrt6.a", "LL5", task6_pre, task6_post, expect)
+add_task("sqrt7 (http://6502org.wikidot.com/software-math-sqrt)",     "sqrt/sqrt7.a", "start", task7_pre, task7_post, expect)
 #too slow!
 #add_task("sqrt8 (https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot)",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
-#add_task("sqrt9 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a)", "sqrt/sqrt9.a", "sqrt16", task9_pre, task9_post, expect)
-#add_task("sqrt10 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a)", "sqrt/sqrt10.a", "start", task10_pre, task10_post, expect)
-#add_task("sqrt11 (http://forum.6502.org/viewtopic.php?p=90611#p90611)", "sqrt/sqrt11.a", "sqrt", task11_pre, task11_post, expect)
+add_task("sqrt9 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a)", "sqrt/sqrt9.a", "sqrt16", task9_pre, task9_post, expect)
+add_task("sqrt10 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a)", "sqrt/sqrt10.a", "start", task10_pre, task10_post, expect)
+add_task("sqrt11 (http://forum.6502.org/viewtopic.php?p=90611#p90611)", "sqrt/sqrt11.a", "sqrt", task11_pre, task11_post, expect)
 # Same as sqrt6!
 # add_task("sqrt12 (https://archive.org/details/PersonalComputerWorld1983-03/page/186/mode/1up)", "sqrt/sqrt12.a", "SQR16", task12_pre, task12_post, expect)
 add_task("sqrt12 (https://gitlab.riscosopen.org/RiscOS/Sources/Apps/Diversions/Meteors/-/blob/master/Srce6502/MetSrc2#L961)", "sqrt/sqrt12.a", "squareroot", task12_pre, task12_post, expect)
+add_task("sqrt13 (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)", "sqrt/sqrt13.a", "sqrt13", task13_pre, task13_post, expect)
+add_task("sqrt14 (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)", "sqrt/sqrt14.a", "sqrt14", task14_pre, task14_post, expect)
+add_task("sqrt15 (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)", "sqrt/sqrt15.a", "sqrt15", task15_pre, task15_post, expect)
 
 #flags = [0] * 65536
 #add_task("adc1", "sqrt/adc1.a", "adc1", taskadc1_pre, taskadc1_post, None)
@@ -222,23 +259,6 @@ add_task("sqrt12 (https://gitlab.riscosopen.org/RiscOS/Sources/Apps/Diversions/M
 spreadsheet = run_tasks()
 
 # 3. Write out results
-#with open("results.csv", "w") as file:
-#    file.write("overflow flag,")
-#    for x in range(0,256):
-#        if x != 0:
-#            file.write(",")
-#        file.write(str(x))
-#
-#    for v in range(0,65536):
-#        x = v & 255
-#        y = v // 256
-#        if x == 0:
-#            file.write("\n" + str(y) + ",")
-#        if x != 0:
-#            file.write(",")
-#        file.write(str((flags[v] & 1)//1))
-
-
 with open("results.csv", "w") as file:
     i = 0
     file.write("number")

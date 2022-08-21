@@ -22,6 +22,9 @@ All implementations have been sourced from the internet and reformatted for the 
 | sqrt10.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a | my version of sqrt1.a tweaked for performance. |
 | sqrt11.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt11.a | a table based solution, using binary search. from [here](http://forum.6502.org/viewtopic.php?p=90611#p90611) fixed and tweaked for performance. |
 | sqrt12.a | https://gitlab.riscosopen.org/RiscOS/Sources/Apps/Diversions/Meteors/-/blob/master/Srce6502/MetSrc2#L961 | from the BBC Micro game Acornsoft Meteors |
+| sqrt13.a | https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937     | by hexwab                                      |
+| sqrt14.a | https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937     | by hexwab                                      |
+| sqrt15.a | https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937     | by hexwab                                      |
 
 I've omitted implementations sqrt4.a and sqrt8.a as they calculate squares by adding successive odd numbers. This turns out to be extremely slow for anything but small numbers.
 
@@ -33,7 +36,7 @@ The results are then output to a CSV file for graphing in a spreadsheet.
 
 All algorithms provide the correct results. We graph the cycle count of each algorithm over all possible inputs.
 
-![SQRT Performance Comparison](./sqrt.png)
+![SQRT Performance Comparison](./result_all.svg)
 
 | file     | memory (bytes) | worst case cycles | average cycle count |
 | -------- | -------------: | ----------------: | ------------------: |
@@ -47,19 +50,25 @@ All algorithms provide the correct results. We graph the cycle count of each alg
 | sqrt10.a |            168 |               262 |               227.4 |
 | sqrt11.a |            595 |               333 |               268.8 |
 | sqrt12.a |             79 |              1315 |              1198.5 |
+| sqrt13.a |            141 |               492 |               265.4 |
+| sqrt14.a |            224 |               221 |               198.1 |
+| sqrt15.a |            476 |               120 |                35.7 |
 
 All cycle counts include the final RTS, but not any initial JSR. Add 6 cycles for an initial 'JSR sqrt' instruction.
+
+It gets crowded at the bottom of this graph. Here are the fastest table based solutions:
+
+![SQRT Performance Comparison, table based solutions](./result_table_based.svg)
 
 ### Conclusion
 
 It's a speed vs memory trade off.
-* If speed is all important and you can afford 847 bytes of memory then use the fastest routine sqrt9.a.
-* If you can't afford 847 bytes of memory, try sqrt10.a (168 bytes) or sqrt1.a (59 bytes).
+* If speed is all important and you can afford 476 bytes of memory then use the fastest routine sqrt15.a.
 * If every byte counts, choose sqrt7.a (42 bytes).
 * If every byte REALLY REALLY counts, choose sqrt4.a (36 bytes), but be aware that it's **ten** times slower than sqrt7.a, and **twenty two** times slower than sqrt10.a.
 
-![Memory vs Speed Comparison](./memory_vs_speed.png)
+![Memory vs Speed Comparison](./memory_vs_speed.svg)
 
 The orange dots are good candidates to use. The grey dots are the also-rans, don't choose these because there are faster and smaller versions in orange.
 
-Note: The fastest routines (sqrt9 and sqrt3) are table based and have two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
+Note: sqrt9 and sqrt3 have two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
