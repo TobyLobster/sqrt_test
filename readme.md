@@ -71,4 +71,4 @@ It's a speed vs memory trade off.
 
 The orange dots are good candidates to use. The grey dots are the also-rans, don't choose these because there are faster and smaller versions in orange.
 
-Note: sqrt9 and sqrt3 have two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
+Note however: sqrt9 and sqrt3 have two tables of squares (512 bytes). This memory cost can be shared with a fast multiply routine like https://everything2.com/user/eurorusty/writeups/Fast+6502+multiplication which uses the same tables.
