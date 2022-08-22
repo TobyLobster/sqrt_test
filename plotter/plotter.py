@@ -27,7 +27,7 @@ def draw_performance_graph(display_order_for_sqrt_n, title, filename):
     #print(df.values)
     figure = plt.gcf()
     axes = figure.axes
-    print(axes[0].xaxis)
+    #print(axes[0].xaxis)
     plt.title(title)
     plt.gca().set_xlabel("input (0-65535)")
     plt.gca().set_ylabel("cycles")
@@ -66,19 +66,20 @@ data = [
     # name, memory, ave. cycles (unused), good
     ["sqrt1",   59,  0, True],
     ["sqrt2",   73,  0, True],
-    ["sqrt3",  796,  0, True],
-    ["sqrt4",  36,   0, True],
+    ["sqrt3",  860,  0, True],
+    ["sqrt4",   36,  0, True],
     ["sqrt5",   67,  0, True],
     ["sqrt6",   55,  0, True],
     ["sqrt7",   42,  0, True],
     ["sqrt8",   37,  0, True],
-    ["sqrt9",  847,  0, True],
+    ["sqrt9",  891,  0, True],
     ["sqrt10", 168,  0, True],
     ["sqrt11", 595,  0, True],
     ["sqrt12",  79,  0, True],
-    ["sqrt13", 141,  0, True],
-    ["sqrt14", 224,  0, True],
+    ["sqrt13", 140,  0, True],
+    ["sqrt14", 205,  0, True],
     ["sqrt15", 476,  0, True],
+    ["sqrt16",  33,  0, True],
 ]
 
 df = pd.read_csv(r'results.csv', na_values=' ', index_col = 0)
@@ -101,7 +102,7 @@ for i in range(0, len(data)):
         if (data[i][1] > data[j][1]) and (data[i][6] > data[j][6]):
             data[i][3] = False
 
-print (data)
+#print (data)
 good_data = filter(lambda e: e[3], data)
 bad_data = filter(lambda e: not e[3], data)
 
@@ -116,12 +117,12 @@ bad_x = [mem for (name,mem,cycles, good,max,min,avg) in bad_data]
 bad_y = [avg for (name,mem,cycles, good,max,min,avg) in bad_data]
 bad_err = [[avg-min for (name,mem,cycles, good,max,min,avg) in bad_data],
            [max-avg for (name,mem,cycles, good,max,min,avg) in bad_data]]
-print (good_data,good_err)
+#print (good_data,good_err)
 # plot
 fig, ax = plt.subplots(figsize=(10.5, 7))
 plt.xscale("log",subs=[1.5,2,3,4,5,6,8])
 plt.yscale("log",subs=[1.5,2,3,4,5,6,8])
-plt.xlim([30,1000])
+plt.xlim([25,1100])
 from matplotlib.ticker import ScalarFormatter #,NullFormatter,LinearLocator
 ax.yaxis.set_major_formatter(ScalarFormatter())
 ax.yaxis.set_minor_formatter(ScalarFormatter())
@@ -149,10 +150,10 @@ for entry in data:
         ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(5,-2), textcoords="offset points", color=color)
     elif entry[0] == "sqrt3":
         ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(-32,-2), textcoords="offset points", color=color)
-    elif entry[0] == "sqrt9":
-        ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(-5,-10), textcoords="offset points", color=color)
     elif entry[0] == "sqrt5":
         ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(5,-9), textcoords="offset points", color=color)
+    elif entry[0] == "sqrt16":
+        ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(-35,1), textcoords="offset points", color=color)
     else:
         ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(5,-3), textcoords="offset points", color=color)
 
