@@ -63,23 +63,23 @@ draw_performance_graph([0, 8, 16, 4, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 3, 9, 15
 # Memory vs speed
 #
 data = [
-    # name, memory, ave. cycles (unused), good
-    ["sqrt1",   59,  0, True],
-    ["sqrt2",   73,  0, True],
-    ["sqrt3",  860,  0, True],
-    ["sqrt4",   36,  0, True],
-    ["sqrt5",   67,  0, True],
-    ["sqrt6",   55,  0, True],
-    ["sqrt7",   42,  0, True],
-    ["sqrt8",   37,  0, True],
-    ["sqrt9",  891,  0, True],
-    ["sqrt10", 168,  0, True],
-    ["sqrt11", 595,  0, True],
-    ["sqrt12",  79,  0, True],
-    ["sqrt13", 140,  0, True],
-    ["sqrt14", 205,  0, True],
-    ["sqrt15", 476,  0, True],
-    ["sqrt16",  33,  0, True],
+    # name, memory, good
+    ["sqrt1",   59, True],
+    ["sqrt2",   73, True],
+    ["sqrt3",  860, True],
+    ["sqrt4",   36, True],
+    ["sqrt5",   67, True],
+    ["sqrt6",   55, True],
+    ["sqrt7",   42, True],
+    ["sqrt8",   37, True],
+    ["sqrt9",  891, True],
+    ["sqrt10", 168, True],
+    ["sqrt11", 595, True],
+    ["sqrt12",  79, True],
+    ["sqrt13", 140, True],
+    ["sqrt14", 205, True],
+    ["sqrt15", 476, True],
+    ["sqrt16",  33, True],
 ]
 
 df = pd.read_csv(r'results.csv', na_values=' ', index_col = 0)
@@ -99,24 +99,24 @@ for i in range(0, len(data)):
             continue
 
         # If data[j] beats data[i] in both memory and speed, then data[i] is not good
-        if (data[i][1] > data[j][1]) and (data[i][6] > data[j][6]):
-            data[i][3] = False
+        if (data[i][1] > data[j][1]) and (data[i][5] > data[j][5]):
+            data[i][2] = False
 
 #print (data)
-good_data = filter(lambda e: e[3], data)
-bad_data = filter(lambda e: not e[3], data)
+good_data = filter(lambda e: e[2], data)
+bad_data = filter(lambda e: not e[2], data)
 
 good_data = list(good_data)
 bad_data = list(bad_data)
 
-good_x = [mem for (name,mem,cycles, good,max,min,avg) in good_data]
-good_y = [avg for (name,mem,cycles, good,max,min,avg) in good_data]
-good_err = [[avg-min for (name,mem,cycles, good,max,min,avg) in good_data],
-            [max-avg for (name,mem,cycles, good,max,min,avg) in good_data]]
-bad_x = [mem for (name,mem,cycles, good,max,min,avg) in bad_data]
-bad_y = [avg for (name,mem,cycles, good,max,min,avg) in bad_data]
-bad_err = [[avg-min for (name,mem,cycles, good,max,min,avg) in bad_data],
-           [max-avg for (name,mem,cycles, good,max,min,avg) in bad_data]]
+good_x = [mem for (name,mem, good,max,min,avg) in good_data]
+good_y = [avg for (name,mem, good,max,min,avg) in good_data]
+good_err = [[avg-min for (name,mem, good,max,min,avg) in good_data],
+            [max-avg for (name,mem, good,max,min,avg) in good_data]]
+bad_x = [mem for (name,mem, good,max,min,avg) in bad_data]
+bad_y = [avg for (name,mem, good,max,min,avg) in bad_data]
+bad_err = [[avg-min for (name,mem, good,max,min,avg) in bad_data],
+           [max-avg for (name,mem, good,max,min,avg) in bad_data]]
 #print (good_data,good_err)
 # plot
 fig, ax = plt.subplots(figsize=(10.5, 7))
@@ -141,21 +141,21 @@ plt.errorbar(good_x, good_y, yerr=good_err, capsize=3, fmt="none", color="orange
 
 # Annotate each point with text
 for entry in data:
-    if entry[3]:
+    if entry[2]:
         color = "black"
     else:
         color = "gray"
 
     if entry[0] == "sqrt7":
-        ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(5,-2), textcoords="offset points", color=color)
+        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(5,-2), textcoords="offset points", color=color)
     elif entry[0] == "sqrt3":
-        ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(-32,-2), textcoords="offset points", color=color)
+        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(-32,-2), textcoords="offset points", color=color)
     elif entry[0] == "sqrt5":
-        ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(5,-9), textcoords="offset points", color=color)
+        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(5,-9), textcoords="offset points", color=color)
     elif entry[0] == "sqrt16":
-        ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(-35,1), textcoords="offset points", color=color)
+        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(-35,1), textcoords="offset points", color=color)
     else:
-        ax.annotate(entry[0], xy=(entry[1], entry[6]), xytext=(5,-3), textcoords="offset points", color=color)
+        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(5,-3), textcoords="offset points", color=color)
 
 
 #ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
