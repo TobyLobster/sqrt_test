@@ -9,8 +9,8 @@ MHI 	  = $03
 
 ; input in X (high byte) and in_lo (low byte)
 ; result in A
-; bytes: 224
-; cycles: best 42, avg 198, worst 220
+; bytes: 205
+; cycles: best 43, avg 194, worst 217
 sqrt14
 	txa
 	bne lo
@@ -41,7 +41,8 @@ a101
 	cmp #11*11
 	lda #5
 	bne resume
-a100	cmp #9*9
+a100
+	cmp #9*9
 	lda #4
 	bne resume
 a0
@@ -69,14 +70,12 @@ a000
 	cmp #1*1
 	lda #0
 resume
-	rol
-	cpx #0
-	beq done
-cont
+	rol         ; A is small, so carry becomes clear
 	tay
 	; result should be $pq. we have $p0
 	txa
-	sec
+	beq .skip3
+cont
 	sbc sqtab-1,Y
 	sta MHI
 	;lda in_lo
@@ -176,6 +175,4 @@ done
 	 RTS
 
 sqtab
-    !byte 1,4,9,16,25,36,49,64,81,100,121,144,169,196,225
-fourtab
-    !byte $ff,$ef,$df,$cf,$bf,$af,$9f,$8f,$7f,$6f,$5f,$4f,$3f,$2f,$1f,$0f
+    !byte 1-1,4-1,9-1,16-1,25-1,36-1,49-1,64-1,81-1,100-1,121-1,144-1,169-1,196-1,225-1

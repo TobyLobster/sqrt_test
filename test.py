@@ -93,6 +93,19 @@ def run_task(name, codefile, start_symbol, pre, post, expect):
         cycles[v] = mon._mpu.processorCycles - oldCycles
     end_time = time.perf_counter()
     print("time: " + str(end_time - start_time))
+
+    ave_cycles = 0
+    best_cycles = float('inf')
+    worst_cycles = 0
+    for v in cycles:
+        worst_cycles = max(worst_cycles, cycles[v])
+        best_cycles = min(best_cycles, cycles[v])
+        ave_cycles += cycles[v]
+    ave_cycles = ave_cycles / 65536
+    print("best cycles: " + str(best_cycles))
+    print("worst cycles: " + str(worst_cycles))
+    print("average cycles: " + str(ave_cycles))
+
     return cycles
 
 def task1_pre(mon, symbols, v):

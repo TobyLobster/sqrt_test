@@ -6,7 +6,7 @@ in_lo     = $02
 ; input in X (high byte) and in_lo (low byte)
 ; result in A
 ; bytes: 141
-; cycles: best 38, avg 265, worst 492
+; cycles: best 39, avg 264, worst 491
 sqrt13
 	txa
 	bne lo
@@ -37,7 +37,8 @@ a101
 	cmp #11*11
 	lda #5
 	bne resume
-a100	cmp #9*9
+a100
+	cmp #9*9
 	lda #4
 	bne resume
 a0
@@ -67,8 +68,7 @@ a000
 resume
 	rol
 	cpx #0
-	bne cont
-	rts
+	beq return
 cont
 	tay
 	; result should be $pq. we have $p0
@@ -105,6 +105,7 @@ loop3	rol
 done
 	tya
 	eor #$ff
+return
 	rts
 
 sqtab

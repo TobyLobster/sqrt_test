@@ -50,8 +50,8 @@ All algorithms provide the correct results. We graph the cycle count of each alg
 | sqrt10.a |            168 |               262 |               227.4 |
 | sqrt11.a |            595 |               333 |               268.8 |
 | sqrt12.a |             79 |              1315 |              1198.5 |
-| sqrt13.a |            141 |               492 |               265.4 |
-| sqrt14.a |            224 |               221 |               198.1 |
+| sqrt13.a |            140 |               491 |               264.4 |
+| sqrt14.a |            205 |               217 |               194.1 |
 | sqrt15.a |            476 |               120 |                35.7 |
 
 All cycle counts include the final RTS, but not any initial JSR. Add 6 cycles for an initial 'JSR sqrt' instruction.
