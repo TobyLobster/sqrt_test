@@ -73,7 +73,7 @@ It's a speed vs memory trade off.
 
 ![Memory vs Speed Comparison](./memory_vs_speed.svg)
 
-Note the logarithmic scale on the Y axis.
+Note the logarithmic scale on the X and Y axis.
 
 The orange dots are good candidates to use. The grey dots are the also-rans, don't choose these because there are faster and smaller versions in orange.
 
