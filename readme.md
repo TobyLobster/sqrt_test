@@ -39,6 +39,8 @@ All algorithms provide the correct results. We graph the cycle count of each alg
 
 ![SQRT Performance Comparison](./result_all.svg)
 
+Note the logarithmic scale on the Y axis.
+
 We see immediately that three of the algorithms are much slower compared to the rest. sqrt4 and sqrt8 and sqrt16 each simply calculate squares by adding successive odd numbers. This turns out to be extremely slow for anything but small numbers.
 
 | file     | memory (bytes) | worst case cycles | average cycle count |
@@ -70,6 +72,8 @@ It's a speed vs memory trade off.
 * If every byte REALLY REALLY counts, choose sqrt16.a (33 bytes), but be aware that it's almost **eleven** times slower than sqrt7.a (42 bytes), and **twenty four** times slower than sqrt10.a.
 
 ![Memory vs Speed Comparison](./memory_vs_speed.svg)
+
+Note the logarithmic scale on the Y axis.
 
 The orange dots are good candidates to use. The grey dots are the also-rans, don't choose these because there are faster and smaller versions in orange.
 
