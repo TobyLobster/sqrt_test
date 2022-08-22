@@ -1,0 +1,31 @@
+; https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt16.a
+; adapted and fixed from https://archive.org/details/bbc-micro-machine-code-portfolio/page/99/mode/2up
+; and optimised for size, not speed!
+
+byte = $02              ; two byte input value
+temp = $04              ; two byte temporary value
+
+* = $0200
+
+sqrt
+    ldy #0              ;
+    sty temp+1          ; temp = 0
+    ldx #0              ;
+    sec                 ;
+loop
+    inx                 ; temp += 1
+    stx temp            ;
+    lda byte            ;
+    sbc temp            ; carry is always set here
+    sta byte            ; byte -= temp
+    lda byte+1          ;
+    sbc temp+1          ;
+    bcc finished        ; branch if we fall below zero
+    sta byte+1          ;
+    iny                 ; root += 1
+    inx                 ; temp += 1
+    bne loop            ;
+    inc temp+1          ;
+    bne loop            ; always branch
+finished
+    rts                 ; y = root

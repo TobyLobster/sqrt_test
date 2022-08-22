@@ -138,12 +138,9 @@ def task3_post(mon, symbols, v):
 def task4_pre(mon, symbols, v):
     set_memory(mon, symbols["ARG"], v & 255)
     set_memory(mon, symbols["ARG"] + 1, v // 256)
-#    set_memory(mon, symbols["byte"], v & 255)
-#    set_memory(mon, symbols["byte"] + 1, v // 256)
 
 def task4_post(mon, symbols, v):
     result = get_memory(mon, symbols["ODD"])
-#    result = mon._mpu.y
     return result
 
 def task5_pre(mon, symbols, v):
@@ -233,6 +230,14 @@ def task15_post(mon, symbols, v):
     result = mon._mpu.a
     return result
 
+def task16_pre(mon, symbols, v):
+    set_memory(mon, symbols["byte"], v & 255)
+    set_memory(mon, symbols["byte"] + 1, v // 256)
+
+def task16_post(mon, symbols, v):
+    result = mon._mpu.y
+    return result
+
 
 
 #def taskadc1_pre(mon, symbols, v):
@@ -249,21 +254,21 @@ add_task("sqrt1 (https://codebase64.org/doku.php?id=base:fast_sqrt)", "sqrt/sqrt
 add_task("sqrt2 (http://www.6502.org/source/integers/root.htm)",      "sqrt/sqrt2.a", "SqRoot", task2_pre, task2_post, expect)
 add_task("sqrt3 (http://www.txbobsc.com/aal/1986/aal8611.html#a1)",   "sqrt/sqrt3.a", "SQRT", task3_pre, task3_post, expect)
 #too slow!
-#add_task("sqrt4 (http://www.txbobsc.com/aal/1985/aal8506.html#a2)",   "sqrt/sqrt4.a", "sqrt", task4_pre, task4_post, expect)
+add_task("sqrt4 (http://www.txbobsc.com/aal/1985/aal8506.html#a2)",   "sqrt/sqrt4.a", "SQRT", task4_pre, task4_post, expect)
 add_task("sqrt5 (http://www.txbobsc.com/aal/1986/aal8609.html#a8)",   "sqrt/sqrt5.a", "SQR3", task5_pre, task5_post, expect)
 add_task("sqrt6 (https://www.bbcelite.com/master/main/subroutine/ll5.html)", "sqrt/sqrt6.a", "LL5", task6_pre, task6_post, expect)
 add_task("sqrt7 (http://6502org.wikidot.com/software-math-sqrt)",     "sqrt/sqrt7.a", "start", task7_pre, task7_post, expect)
 #too slow!
-#add_task("sqrt8 (https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot)",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
+add_task("sqrt8 (https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot)",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
 add_task("sqrt9 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a)", "sqrt/sqrt9.a", "sqrt16", task9_pre, task9_post, expect)
 add_task("sqrt10 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a)", "sqrt/sqrt10.a", "start", task10_pre, task10_post, expect)
 add_task("sqrt11 (http://forum.6502.org/viewtopic.php?p=90611#p90611)", "sqrt/sqrt11.a", "sqrt", task11_pre, task11_post, expect)
-# Same as sqrt6!
-# add_task("sqrt12 (https://archive.org/details/PersonalComputerWorld1983-03/page/186/mode/1up)", "sqrt/sqrt12.a", "SQR16", task12_pre, task12_post, expect)
 add_task("sqrt12 (https://gitlab.riscosopen.org/RiscOS/Sources/Apps/Diversions/Meteors/-/blob/master/Srce6502/MetSrc2#L961)", "sqrt/sqrt12.a", "squareroot", task12_pre, task12_post, expect)
 add_task("sqrt13 (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)", "sqrt/sqrt13.a", "sqrt13", task13_pre, task13_post, expect)
 add_task("sqrt14 (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)", "sqrt/sqrt14.a", "sqrt14", task14_pre, task14_post, expect)
 add_task("sqrt15 (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)", "sqrt/sqrt15.a", "sqrt15", task15_pre, task15_post, expect)
+#too slow!
+add_task("sqrt16 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt16.a)",   "sqrt/sqrt16.a", "sqrt", task16_pre, task16_post, expect)
 
 #flags = [0] * 65536
 #add_task("adc1", "sqrt/adc1.a", "adc1", taskadc1_pre, taskadc1_post, None)

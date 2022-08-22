@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-sqrt_n_in_csv_order = [0, 1, 2, 3, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15]
+sqrt_n_in_csv_order = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
 def draw_performance_graph(display_order_for_sqrt_n, title, filename):
     order = []
@@ -52,8 +52,60 @@ def draw_performance_graph(display_order_for_sqrt_n, title, filename):
     #save image
     plt.savefig(filename)
 
-draw_performance_graph([0, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 3, 9, 15], "Integer SQRT performance on 6502 (all solutions)", "result_all.svg")
+draw_performance_graph([0, 8, 16, 4, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 3, 9, 15], "Integer SQRT performance on 6502 (all solutions)", "result_all.svg")
+draw_performance_graph([0, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 3, 9, 15], "Integer SQRT performance on 6502 (ok solutions)", "result_ok.svg")
 draw_performance_graph([0, 3, 9, 15], "Integer SQRT performance on 6502 (table based solutions only)", "result_table_based.svg")
+
+def draw_memory_vs_speed(data, title, filename):
+    # check which solutions are 'good'
+    for i in range(0, len(data)):
+        for j in range(0, len(data)):
+            if i == j:
+                continue
+
+            # If data[j] beats data[i] in both memory and speed, then data[i] is not good
+            if (data[i][1] > data[j][1]) and (data[i][2] > data[j][2]):
+                data[i][3] = False
+
+    good_data = filter(lambda e: e[3], data)
+    bad_data = filter(lambda e: not e[3], data)
+
+    good_data = list(good_data)
+    bad_data = list(bad_data)
+
+    good_x = [cycles for (name,mem,cycles, good) in good_data]
+    good_y = [mem for (name,mem,cycles, good) in good_data]
+    bad_x = [cycles for (name,mem,cycles, good) in bad_data]
+    bad_y = [mem for (name,mem,cycles, good) in bad_data]
+
+    # plot
+    fig, ax = plt.subplots(figsize=(10.5, 7))
+
+    plt.gca().set_xlabel("average time taken (cycles)") #, fontweight='bold')
+    plt.gca().set_ylabel("memory (bytes)") #, fontweight='bold')
+
+    ax.scatter(bad_x, bad_y, color="gray")
+    ax.scatter(good_x, good_y, color="orange")
+
+    # Annotate each point with text
+    for entry in data:
+        if entry[3]:
+            color = "black"
+        else:
+            color = "gray"
+
+        if entry[0] == "sqrt7":
+            ax.annotate(entry[0], xy=(entry[2] + 10, entry[1] - 20), color=color)
+        elif entry[0] == "sqrt12":
+            ax.annotate(entry[0], xy=(entry[2] - 30, entry[1] + 25), color=color)
+        else:
+            ax.annotate(entry[0], xy=(entry[2] + 10, entry[1] + 10), color=color)
+
+    #ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
+    #       ylim=(0, 8), yticks=np.arange(1, 8))
+
+    plt.title(title)
+    plt.savefig(filename)
 
 # Memory vs speed
 #
@@ -62,9 +114,11 @@ data = [
     ["sqrt1",   59,  317.7, True],
     ["sqrt2",   73,  846.5, True],
     ["sqrt3",  796,   43.8, True],
+    ["sqrt4",   36, 4989.0, True],
     ["sqrt5",   67,  731.0, True],
     ["sqrt6",   55,  522.9, True],
     ["sqrt7",   42,  501.5, True],
+    ["sqrt8",   37, 6342.4, True],
     ["sqrt9",  847,   39.8, True],
     ["sqrt10", 168,  227.4, True],
     ["sqrt11", 595,  268.8, True],
@@ -72,54 +126,11 @@ data = [
     ["sqrt13", 140,  264.4, True],
     ["sqrt14", 205,  194.1, True],
     ["sqrt15", 476,   35.7, True],
+    ["sqrt16",  33, 5488.6, True],
 ]
 
-# check which solutions are 'good'
-for i in range(0, len(data)):
-    for j in range(0, len(data)):
-        if i == j:
-            continue
-
-        # If data[j] beats data[i] in both memory and speed, then data[i] is not good
-        if (data[i][1] > data[j][1]) and (data[i][2] > data[j][2]):
-            data[i][3] = False
-
-good_data = filter(lambda e: e[3], data)
-bad_data = filter(lambda e: not e[3], data)
-
-good_data = list(good_data)
-bad_data = list(bad_data)
-
-good_x = [cycles for (name,mem,cycles, good) in good_data]
-good_y = [mem for (name,mem,cycles, good) in good_data]
-bad_x = [cycles for (name,mem,cycles, good) in bad_data]
-bad_y = [mem for (name,mem,cycles, good) in bad_data]
-
-# plot
-fig, ax = plt.subplots(figsize=(10.5, 7))
-
-plt.gca().set_xlabel("average time taken (cycles)") #, fontweight='bold')
-plt.gca().set_ylabel("memory (bytes)") #, fontweight='bold')
-
-ax.scatter(bad_x, bad_y, color="gray")
-ax.scatter(good_x, good_y, color="orange")
-
-# Annotate each point with text
-for entry in data:
-    if entry[3]:
-        color = "black"
-    else:
-        color = "gray"
-
-    if entry[0] == "sqrt7":
-        ax.annotate(entry[0], xy=(entry[2] + 10, entry[1] - 15), color=color)
-    elif entry[0] == "sqrt12":
-        ax.annotate(entry[0], xy=(entry[2] - 30, entry[1] + 15), color=color)
-    else:
-        ax.annotate(entry[0], xy=(entry[2] + 10, entry[1]), color=color)
-
-#ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
-#       ylim=(0, 8), yticks=np.arange(1, 8))
-
-plt.title("Memory vs speed")
-plt.savefig("memory_vs_speed.svg")
+draw_memory_vs_speed(data, "memory vs speed (all solutions)", "memory_vs_speed_all.svg")
+del data[16-1]
+del data[8-1]
+del data[4-1]
+draw_memory_vs_speed(data, "memory vs speed (non-slow solutions)", "memory_vs_speed_ok.svg")
