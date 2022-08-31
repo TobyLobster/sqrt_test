@@ -41,7 +41,7 @@ All algorithms provide the correct results. We graph the cycle count of each alg
 
 ![SQRT Performance Comparison](./result_all.svg)
 
-We see immediately that three of the algorithms are much slower compared to the rest. sqrt4 and sqrt8 and sqrt16 each simply calculate squares by adding successive odd numbers. This turns out to be extremely slow for anything but small numbers. So we can get a more useful picture by omitting these three:
+We see immediately that three of the algorithms are much slower compared to the rest. sqrt4 and sqrt8 and sqrt16 each calculate squares simply by adding successive odd numbers. This is extremely slow for anything but small numbers. So we can get a more useful picture by omitting these three:
 
 ![SQRT Performance Comparison](./result_useful.svg)
 

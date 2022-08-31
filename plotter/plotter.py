@@ -58,8 +58,8 @@ def draw_performance_graph(display_order_for_sqrt_n, title, filename):
     #save image
     plt.savefig(filename)
 
-draw_performance_graph([0, 8, 16, 4, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 3, 9, 15, 17, 18], "Integer SQRT performance on 6502 (all routines)", "result_all.svg")
-draw_performance_graph([0, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 3, 9, 15, 17, 18], "Integer SQRT performance on 6502 (non slow routines)", "result_useful.svg")
+draw_performance_graph([0, 8, 16, 4, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 18, 17, 3, 9, 15], "Integer SQRT performance on 6502 (all routines)", "result_all.svg")
+draw_performance_graph([0, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 18, 17, 3, 9, 15], "Integer SQRT performance on 6502 (the non-slow routines)", "result_useful.svg")
 #draw_performance_graph([0, 18], "Integer SQRT performance on 6502", "result_18.svg")
 draw_performance_graph([0, 3, 9, 15], "Integer SQRT performance on 6502 (fastest routines only)", "result_fastest.svg")
 
