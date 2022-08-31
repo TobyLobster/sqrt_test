@@ -70,7 +70,7 @@ All cycle counts include the final RTS, but not any initial JSR. Add 6 cycles fo
 
 It is still crowded at the bottom of this graph. Here are the fastest, table based solutions:
 
-![SQRT Performance Comparison, table based solutions](./result_table_based.svg)
+![SQRT Performance Comparison, table based solutions](./result_fastest.svg)
 
 ### Conclusion
 
