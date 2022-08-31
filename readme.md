@@ -64,7 +64,7 @@ We see immediately that three of the algorithms are much slower compared to the 
 | sqrt15.a |            476 |               120 |                35.7 |
 | sqrt16.a |             33 |              8205 |              5488.6 |
 | sqrt17.a |            377 |               484 |               135.4 |
-| sqrt18.a |            266 |              1044 |               146.0 |
+| sqrt18.a |            298 |               510 |               142.8 |
 
 All cycle counts include the final RTS, but not any initial JSR. Add 6 cycles for an initial 'JSR sqrt' instruction.
 
