@@ -51,13 +51,14 @@ def get_register(mon, register):
     return -1
 
 def run_task(name, codefile, start_symbol, pre, post, expect):
-    symbols = assemble.assemble(codefile, "TESTME")
+    symbols = assemble.assemble(codefile, "build/TESTME")
 
     start = symbols[start_symbol]
     startHexString = '{:04x}'.format(start)
+    print("start:%s" % startHexString)
 
     mon = Monitor()
-    mon.do_load("./TESTME $" + startHexString)
+    mon.do_load("build/TESTME $" + startHexString)
 
     start_time = time.perf_counter()
     cycles = {}
@@ -238,16 +239,21 @@ def task16_post(mon, symbols, v):
     result = mon._mpu.y
     return result
 
+def task17_pre(mon, symbols, v):
+    set_memory(mon, symbols["input"], v & 255)
+    set_memory(mon, symbols["input"] + 1, v // 256)
 
+def task17_post(mon, symbols, v):
+    result = mon._mpu.y
+    return result
 
-#def taskadc1_pre(mon, symbols, v):
-#    set_memory(mon, symbols["mem1"], v & 255)
-#    set_memory(mon, symbols["mem2"], v // 256)
-#
-#def taskadc1_post(mon, symbols, v):
-#    flags[v] = mon._mpu.p
-#    return 0
+def task18_pre(mon, symbols, v):
+    set_memory(mon, symbols["input"], v & 255)
+    set_memory(mon, symbols["input"] + 1, v // 256)
 
+def task18_post(mon, symbols, v):
+    result = mon._mpu.a
+    return result
 
 # 1. Add tasks
 add_task("sqrt1 (https://codebase64.org/doku.php?id=base:fast_sqrt)", "sqrt/sqrt1.a", "start", task1_pre, task1_post, expect)
@@ -269,9 +275,8 @@ add_task("sqrt14 (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)"
 add_task("sqrt15 (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)", "sqrt/sqrt15.a", "sqrt15", task15_pre, task15_post, expect)
 #too slow!
 add_task("sqrt16 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt16.a)",   "sqrt/sqrt16.a", "sqrt", task16_pre, task16_post, expect)
-
-#flags = [0] * 65536
-#add_task("adc1", "sqrt/adc1.a", "adc1", taskadc1_pre, taskadc1_post, None)
+add_task("sqrt17 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt17.a)",   "sqrt/sqrt17.a", "sqrt", task17_pre, task17_post, expect)
+add_task("sqrt18 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt18.a)",   "sqrt/sqrt18.a", "sqrt", task18_pre, task18_post, expect)
 
 # 2. Run tasks
 spreadsheet = run_tasks()

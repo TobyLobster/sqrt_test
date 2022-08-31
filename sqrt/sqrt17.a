@@ -1,0 +1,117 @@
+; https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt17.a
+
+input = $02                     ; two byte input value
+temp = $04                      ; one byte temporary value
+
+* = $0206                       ; Align tables on page boundary
+
+sqrt
+    lda input+1                 ;
+    lsr                         ;
+    lsr                         ;
+    beq less_than_1024          ;
+    tax                         ; X = input // 1024
+    lda input                   ;
+    sec                         ;
+    sbc sqlow-1,x               ;
+    sta input                   ;
+    lda input+1                 ;
+    sbc sqhigh-1,x              ;
+    sta input+1                 ; input -= sq[Y]
+
+    lda lower_bound_sqrt-1,x    ; Y = lower_bound_sqrt[X]
+continue
+    tay                         ;
+    asl                         ;
+    tax                         ; X = temp = 2*y
+    lda #0                      ;
+    rol                         ;
+    sta temp1                   ; temp1 is zero or one
+    sec                         ;
+loop
+    inx                         ; temp += 1
+    stx temp                    ;
+
+    lda input                   ;
+    sbc temp                    ; carry is always set
+    sta input                   ; input -= temp
+    lda input+1                 ;
+temp1 = * + 1
+    sbc #0                      ; self modifying code
+    bcc finished                ; branch if we fall below zero
+    sta input+1                 ;
+
+    iny                         ; root += 1
+    inx                         ; temp += 1
+    bne loop                    ; ALWAYS branch
+finished
+    rts                         ; y = root
+
+less_than_1024
+    lda input                   ;
+    asl                         ;
+    sta temp                    ;
+    lda input+1                 ;
+    rol                         ;
+    asl temp                    ;
+    rol                         ;
+    asl temp                    ;
+    rol                         ;
+    tay                         ; Y = input/32 = lower bound for sqrt
+
+    ; input -= small_squares
+    lda input                   ;
+    adc small_squares_low,y     ; carry is always clear
+    sta input                   ;
+    lda input+1                 ;
+    adc small_squares_high,y    ;
+    sta input+1                 ;
+
+    lda small_square_roots,y    ;
+    jmp continue                ;
+
+; i = sqrt(32n)              0 <= n < 64
+small_square_roots
+    !byte  0,  5,  8,  9, 11, 12, 13, 14
+    !byte 16, 16, 17, 18, 19, 20, 21, 21
+    !byte 22, 23, 24, 24, 25, 25, 26, 27
+    !byte 27, 28, 28, 29, 29, 30, 30, 31
+; (65536-i*i) AND 65535      i as above
+small_squares_low
+    !byte $00, $e7, $c0, $af, $87, $70, $57, $3c
+    !byte $00, $00, $df, $bc, $97, $70, $47, $47
+    !byte $1c, $ef, $c0, $c0, $8f, $8f, $5c, $27
+    !byte $27, $f0, $f0, $b7, $b7, $7c, $7c, $3f
+small_squares_high
+    !byte $00, $ff, $ff, $ff, $ff, $ff, $ff, $ff
+    !byte $ff, $ff, $fe, $fe, $fe, $fe, $fe, $fe
+    !byte $fe, $fd, $fd, $fd, $fd, $fd, $fd, $fd
+    !byte $fd, $fc, $fc, $fc, $fc, $fc, $fc, $fc
+
+lower_bound_sqrt
+    !byte      $20, $2d, $37, $40, $47, $4e, $54
+    !byte $5a, $60, $65, $6a, $6e, $73, $77, $7b
+    !byte $80, $83, $87, $8b, $8f, $92, $96, $99
+    !byte $9c, $a0, $a3, $a6, $a9, $ac, $af, $b2
+    !byte $b5, $b7, $ba, $bd, $c0, $c2, $c5, $c7
+    !byte $ca, $cc, $cf, $d1, $d4, $d6, $d9, $db
+    !byte $dd, $e0, $e2, $e4, $e6, $e8, $eb, $ed
+    !byte $ef, $f1, $f3, $f5, $f7, $f9, $fb, $fd
+sqlow
+    !byte      $00, $e9, $d1, $00, $b1, $c4, $90
+    !byte $a4, $00, $d9, $e4, $44, $a9, $51, $19
+    !byte $00, $09, $31, $79, $e1, $44, $e4, $71
+    !byte $10, $00, $c9, $a4, $91, $90, $a1, $c4
+    !byte $f9, $d1, $24, $89, $00, $04, $99, $b1
+    !byte $64, $90, $61, $a1, $90, $e4, $f1, $59
+    !byte $c9, $00, $84, $10, $a4, $40, $b9, $69
+    !byte $21, $e1, $a9, $79, $51, $31, $19, $09
+sqhigh
+    !byte      $04, $07, $0b, $10, $13, $17, $1b
+    !byte $1f, $24, $27, $2b, $2f, $33, $37, $3b
+    !byte $40, $43, $47, $4b, $4f, $53, $57, $5b
+    !byte $5f, $64, $67, $6b, $6f, $73, $77, $7b
+    !byte $7f, $82, $87, $8b, $90, $93, $97, $9a
+    !byte $9f, $a2, $a7, $aa, $af, $b2, $b7, $bb
+    !byte $be, $c4, $c7, $cb, $ce, $d2, $d7, $db
+    !byte $df, $e2, $e6, $ea, $ee, $f2, $f6, $fa

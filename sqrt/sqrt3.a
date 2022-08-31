@@ -20,7 +20,7 @@ NUMBER     =  $04           ; ,03
 ARGSAV     =  $06           ; ,05
 ARGLO      =  $08
 ; --------------------------------
-       * = $60a4            ; OUT OF THE WAY
+       * = $02e4            ; Align to avoid page boundary crossings when accessing tables
 ;       .TF SQUARE ROOT.OBJ
 ; --------------------------------
 SQRT
@@ -87,7 +87,7 @@ l9     LDY #$FF
 ;ZZ     =  *-SQRT
 ; --------------------------------
 ;       PUT TABLES SO NO PAGE CROSSING
-!align $ff, $40
+;!align $ff, $40
 ; --------------------------------
 ;       DON'T WASTE PAPER
 ;       .LIST MOFF

@@ -3,7 +3,7 @@
 argsav     =  $02                   ; 2 bytes
 arglo      =  $04                   ; 1 byte
 
-    * = $6085
+    * = $02b1       ; Align to avoid page boundary crossings when accessing tables
 
 ; ***************************************************************************************
 ;
@@ -146,7 +146,7 @@ over65280
     rts                             ;
 
 ; align tables to $2c offset from a page, so no page crossings occur
-!align $ff, $2c
+; !align $ff, $2c
 
 ; --------------------------------
 ; square root of n, for n=11264 to 65280 step 256

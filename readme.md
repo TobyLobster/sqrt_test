@@ -28,6 +28,8 @@ All implementations have been sourced from the internet and reformatted for the 
 | sqrt14.a | https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937     | by hexwab                                      |
 | sqrt15.a | https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937     | by hexwab                                      |
 | sqrt16.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt16.a | adds successive odd numbers                    |
+| sqrt17.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt17.a |                                                |
+| sqrt18.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt18.a |                                                |
 
 ### Python Script
 After assembling each file using [acme](https://github.com/meonwax/acme), we use [py65mon](https://github.com/mnaberez/py65/blob/master/docs/index.rst) to load and execute the binary 6502, check the results are accurate and record the cycle count.
@@ -39,21 +41,21 @@ All algorithms provide the correct results. We graph the cycle count of each alg
 
 ![SQRT Performance Comparison](./result_all.svg)
 
-Note the logarithmic scale on the Y axis.
+We see immediately that three of the algorithms are much slower compared to the rest. sqrt4 and sqrt8 and sqrt16 each simply calculate squares by adding successive odd numbers. This turns out to be extremely slow for anything but small numbers. So we can get a more useful picture by omitting these three:
 
-We see immediately that three of the algorithms are much slower compared to the rest. sqrt4 and sqrt8 and sqrt16 each simply calculate squares by adding successive odd numbers. This turns out to be extremely slow for anything but small numbers.
+![SQRT Performance Comparison](./result_useful.svg)
 
 | file     | memory (bytes) | worst case cycles | average cycle count |
 | -------- | -------------: | ----------------: | ------------------: |
 | sqrt1.a  |             59 |               354 |               317.7 |
 | sqrt2.a  |             73 |               923 |               846.5 |
-| sqrt3.a  |            860 |               138 |                43.8 |
+| sqrt3.a  |            796 |               138 |                43.8 |
 | sqrt4.a  |             36 |              7451 |              4989.1 |
 | sqrt5.a  |             67 |               766 |               731.0 |
 | sqrt6.a  |             55 |               574 |               522.9 |
 | sqrt7.a  |             42 |               519 |               501.5 |
 | sqrt8.a  |             37 |              9483 |              6342.4 |
-| sqrt9.a  |            891 |               129 |                39.8 |
+| sqrt9.a  |            847 |               129 |                39.8 |
 | sqrt10.a |            168 |               262 |               227.4 |
 | sqrt11.a |            595 |               333 |               268.8 |
 | sqrt12.a |             79 |              1315 |              1198.5 |
@@ -61,8 +63,14 @@ We see immediately that three of the algorithms are much slower compared to the 
 | sqrt14.a |            205 |               217 |               194.1 |
 | sqrt15.a |            476 |               120 |                35.7 |
 | sqrt16.a |             33 |              8205 |              5488.6 |
+| sqrt17.a |            377 |               484 |               135.4 |
+| sqrt18.a |            266 |              1044 |               146.0 |
 
 All cycle counts include the final RTS, but not any initial JSR. Add 6 cycles for an initial 'JSR sqrt' instruction.
+
+It is still crowded at the bottom of this graph. Here are the fastest, table based solutions:
+
+![SQRT Performance Comparison, table based solutions](./result_table_based.svg)
 
 ### Conclusion
 
@@ -72,8 +80,6 @@ It's a speed vs memory trade off.
 * If every byte REALLY REALLY counts, choose sqrt16.a (33 bytes), but be aware that it's almost **eleven** times slower than sqrt7.a (42 bytes), and **twenty four** times slower than sqrt10.a.
 
 ![Memory vs Speed Comparison](./memory_vs_speed.svg)
-
-Note the logarithmic scale on the X and Y axis.
 
 The orange dots are good candidates to use. The grey dots are the also-rans, don't choose these because there are faster and smaller versions in orange.
 

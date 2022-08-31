@@ -2,13 +2,13 @@ import os
 import re
 
 def assemble(code_file, bin_filepath):
-    code = os.system("${ACME=acme} -o " + bin_filepath + " -r temp.txt --symbollist temp.sym " + code_file)
+    code = os.system("${ACME=acme} -o " + bin_filepath + " -r build/temp.txt --symbollist build/temp.sym " + code_file)
     exit_status = os.WEXITSTATUS(code)
     if exit_status != 0:
         print("Assembly failed")
         exit(exit_status)
 
-    with open("temp.sym") as file:
+    with open("build/temp.sym") as file:
         lines = file.readlines()
 
     symbols = {}

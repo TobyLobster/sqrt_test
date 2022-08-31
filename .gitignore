@@ -4,3 +4,4 @@ temp.*
 TESTME*
 workspace/**
 results.csv
+build/**
