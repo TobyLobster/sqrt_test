@@ -77,7 +77,7 @@ It is still crowded at the bottom of this graph. Here are the fastest, table bas
 It's a speed vs memory trade off.
 * If speed is all important and you can afford 512 bytes of memory then use the fastest routine sqrt15.a.
 * If every byte counts, choose sqrt7.a (42 bytes).
-* If every byte REALLY REALLY counts, choose sqrt16.a (33 bytes), but be aware that it's almost **eleven** times slower than sqrt7.a (42 bytes), and **twenty four** times slower than sqrt10.a.
+* If every byte REALLY REALLY counts, choose sqrt16.a (33 bytes) or sqrt4.a (36 bytes, but 32 if input number is already in registers), but be aware that these are about **eleven** times slower than sqrt7.a (42 bytes), and **twenty four** times slower than sqrt10.a.
 
 ![Memory vs Speed Comparison](./memory_vs_speed.svg)
 

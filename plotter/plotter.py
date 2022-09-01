@@ -151,8 +151,8 @@ ax.minorticks_on()
 plt.gca().set_xlabel("memory (bytes)") #, fontweight='bold')
 plt.gca().set_ylabel("average time taken (cycles)") #, fontweight='bold')
 
-ax.scatter(bad_x, bad_y, color="gray")
-ax.errorbar(bad_x, bad_y, xerr=None, capsize=3,yerr=bad_err, fmt="none", color="gray")
+ax.scatter(bad_x, bad_y, color="lightgrey")
+ax.errorbar(bad_x, bad_y, xerr=None, capsize=3,yerr=bad_err, fmt="none", color="lightgrey")
 ax.scatter(good_x, good_y, color="orange")
 plt.errorbar(good_x, good_y, yerr=good_err, capsize=3, fmt="none", color="orange")
 
@@ -161,7 +161,7 @@ for entry in data:
     if entry[2]:
         color = "black"
     else:
-        color = "gray"
+        color = "lightgrey"
 
     if entry[0] == "sqrt7":
         ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(4,-8), textcoords="offset points", color=color)
