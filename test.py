@@ -1,5 +1,6 @@
 import py65
 import assemble
+import os
 from py65.monitor import Monitor
 from io import StringIO
 import time
@@ -16,17 +17,20 @@ def add_task(name, file, start_symbol, pre, post, expect):
 
 def run_tasks():
     spreadsheet = []
+    file_sizes = []
     task_index = 0
     for (name, file, start_symbol, pre, post, expect) in tasks:
         spreadsheet.append({})
+        file_sizes.append({})
         code = file
         print("Running task " + code)
-        cycles = run_task(name, code, start_symbol, pre, post, expect)
+        (file_size, cycles) = run_task(name, code, start_symbol, pre, post, expect)
+        file_sizes[task_index] = (name, file_size)
         print("Task " + code + " completed")
         for key in cycles:
             spreadsheet[task_index][key] = cycles[key]
         task_index += 1
-    return spreadsheet
+    return (file_sizes, spreadsheet)
 
 def set_memory(mon, addr, val):
     mon._mpu.memory[addr] = val
@@ -60,6 +64,8 @@ def run_task(name, codefile, start_symbol, pre, post, expect):
     print ("load %s start %s" % (loadHexString,startHexString))
     mon = Monitor()
     mon.do_load("build/TESTME $" + loadHexString)
+
+    file_size = os.path.getsize("build/TESTME")
 
     start_time = time.perf_counter()
     cycles = {}
@@ -108,7 +114,7 @@ def run_task(name, codefile, start_symbol, pre, post, expect):
     print("worst cycles: " + str(worst_cycles))
     print("average cycles: " + str(ave_cycles))
 
-    return cycles
+    return (file_size, cycles)
 
 def task1_pre(mon, symbols, v):
     set_memory(mon, symbols["MLO"], v & 255)
@@ -280,9 +286,15 @@ add_task("sqrt17 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt17
 add_task("sqrt18 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt18.a)",   "sqrt/sqrt18.a", "sqrt", task18_pre, task18_post, expect)
 
 # 2. Run tasks
-spreadsheet = run_tasks()
+(file_sizes, spreadsheet) = run_tasks()
 
 # 3. Write out results
+with open("sizes.csv", "w") as file:
+    file.write("test_name, file_size\n")
+    for entry in file_sizes:
+        file.write(str(entry[0]) + ", " + str(entry[1]) + "\n")
+
+# 3a. Write out results
 with open("results.csv", "w") as file:
     i = 0
     file.write("number")

@@ -4,4 +4,5 @@ temp.*
 TESTME*
 workspace/**
 results.csv
+sizes.csv
 build/**

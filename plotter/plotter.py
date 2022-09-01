@@ -4,6 +4,8 @@ import pandas as pd
 
 sqrt_n_in_csv_order = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,17,18]
 #sqrt_n_in_csv_order = [0, 18]
+fast_list = [3, 9, 15]
+slow_list = [4, 8, 16]
 
 def draw_performance_graph(display_order_for_sqrt_n, title, filename):
     order = []
@@ -61,31 +63,20 @@ def draw_performance_graph(display_order_for_sqrt_n, title, filename):
 draw_performance_graph([0, 8, 16, 4, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 18, 17, 3, 9, 15], "Integer SQRT performance on 6502 (all routines)", "result_all.svg")
 draw_performance_graph([0, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 18, 17, 3, 9, 15], "Integer SQRT performance on 6502 (the non-slow routines)", "result_useful.svg")
 #draw_performance_graph([0, 18], "Integer SQRT performance on 6502", "result_18.svg")
-draw_performance_graph([0, 3, 9, 15], "Integer SQRT performance on 6502 (fastest routines only)", "result_fastest.svg")
+draw_performance_graph([0] + fast_list, "Integer SQRT performance on 6502 (fastest routines only)", "result_fastest.svg")
 
 # Memory vs speed
 #
-data = [
-    # name, memory, good
-    ["sqrt1",   59, True],
-    ["sqrt2",   73, True],
-    ["sqrt3",  860, True],
-    ["sqrt4",   36, True],
-    ["sqrt5",   67, True],
-    ["sqrt6",   55, True],
-    ["sqrt7",   42, True],
-    ["sqrt8",   37, True],
-    ["sqrt9",  891, True],
-    ["sqrt10", 168, True],
-    ["sqrt11", 595, True],
-    ["sqrt12",  79, True],
-    ["sqrt13", 140, True],
-    ["sqrt14", 205, True],
-    ["sqrt15", 476, True],
-    ["sqrt16",  33, True],
-    ["sqrt17", 377, True],
-    ["sqrt18", 299, True],
-]
+sizes_df = pd.read_csv(r'sizes.csv')
+
+# add 'good' column
+sizes_df['good'] = [True] * len(sizes_df.index)
+
+# Make the test_name the first word only
+sizes_df['test_name'] = [x.split()[0] for x in sizes_df['test_name']]
+
+# name, memory, good
+data = sizes_df.values.tolist()
 
 df = pd.read_csv(r'results.csv', na_values=' ', index_col = 0)
 max=df.max()
@@ -98,9 +89,11 @@ for i in range(0, len(data)):
     data[i].append(avg[i])
 
 # Remove the slow ones
-del data[16-1]
-del data[8-1]
-del data[4-1]
+for i in slow_list:
+    del data[i-1]
+#del data[16-1]
+#del data[8-1]
+#del data[4-1]
 
 # check which solutions are 'good'
 for i in range(0, len(data)):
@@ -162,7 +155,7 @@ for entry in data:
         color = "gray"
 
     if entry[0] == "sqrt7":
-        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(5,-8), textcoords="offset points", color=color)
+        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(4,-8), textcoords="offset points", color=color)
     elif entry[0] == "sqrt3":
         ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(-32,-2), textcoords="offset points", color=color)
     elif entry[0] == "sqrt5":
