@@ -89,7 +89,7 @@ for i in range(0, len(data)):
     data[i].append(avg[i])
 
 # Remove the slow ones
-for i in slow_list:
+for i in sorted(slow_list, reverse=True):
     del data[i-1]
 #del data[16-1]
 #del data[8-1]
