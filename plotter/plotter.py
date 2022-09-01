@@ -88,12 +88,9 @@ for i in range(0, len(data)):
     data[i].append(min[i])
     data[i].append(avg[i])
 
-# Remove the slow ones
+# Remove the slow ones by index, in reverse order so the indices don't change as we delete
 for i in sorted(slow_list, reverse=True):
     del data[i-1]
-#del data[16-1]
-#del data[8-1]
-#del data[4-1]
 
 # check which solutions are 'good'
 for i in range(0, len(data)):
