@@ -53,12 +53,13 @@ def get_register(mon, register):
 def run_task(name, codefile, start_symbol, pre, post, expect):
     symbols = assemble.assemble(codefile, "build/TESTME")
 
+    load = symbols.get('_start') or symbols[start_symbol]
+    loadHexString = '{:04x}'.format(load)
     start = symbols[start_symbol]
     startHexString = '{:04x}'.format(start)
-    print("start:%s" % startHexString)
-
+    print ("load %s start %s" % (loadHexString,startHexString))
     mon = Monitor()
-    mon.do_load("build/TESTME $" + startHexString)
+    mon.do_load("build/TESTME $" + loadHexString)
 
     start_time = time.perf_counter()
     cycles = {}

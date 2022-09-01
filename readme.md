@@ -61,7 +61,7 @@ We see immediately that three of the algorithms are much slower compared to the 
 | sqrt12.a |             79 |              1315 |              1198.5 |
 | sqrt13.a |            140 |               491 |               264.4 |
 | sqrt14.a |            205 |               217 |               194.1 |
-| sqrt15.a |            476 |               120 |                35.7 |
+| sqrt15.a |            512 |                87 |                33.7 |
 | sqrt16.a |             33 |              8205 |              5488.6 |
 | sqrt17.a |            377 |               484 |               135.4 |
 | sqrt18.a |            298 |               510 |               142.8 |
@@ -75,7 +75,7 @@ It is still crowded at the bottom of this graph. Here are the fastest, table bas
 ### Conclusion
 
 It's a speed vs memory trade off.
-* If speed is all important and you can afford 476 bytes of memory then use the fastest routine sqrt15.a.
+* If speed is all important and you can afford 512 bytes of memory then use the fastest routine sqrt15.a.
 * If every byte counts, choose sqrt7.a (42 bytes).
 * If every byte REALLY REALLY counts, choose sqrt16.a (33 bytes), but be aware that it's almost **eleven** times slower than sqrt7.a (42 bytes), and **twenty four** times slower than sqrt10.a.
 
