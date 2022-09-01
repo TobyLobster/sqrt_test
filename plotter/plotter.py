@@ -1,3 +1,4 @@
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -6,8 +7,14 @@ sqrt_n_in_csv_order = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 #sqrt_n_in_csv_order = [0, 18]
 fast_list = [3, 9, 15]
 slow_list = [4, 8, 16]
+log_plots = False
 
 def draw_performance_graph(display_order_for_sqrt_n, title, filename):
+    global log_plots
+
+    # Set the random number generator
+    mpl.rcParams['svg.hashsalt'] = 'hello'
+
     order = []
     for i in display_order_for_sqrt_n:
         ind = sqrt_n_in_csv_order.index(i)
@@ -34,7 +41,8 @@ def draw_performance_graph(display_order_for_sqrt_n, title, filename):
     plt.title(title)
     plt.gca().set_xlabel("input (0-65535)")
     plt.gca().set_ylabel("cycles")
-#    plt.yscale("log",subs=[1.5,2,3,4,5,6,8])
+    if log_plots:
+        plt.yscale("log",subs=[1.5,2,3,4,5,6,8])
     from matplotlib.ticker import ScalarFormatter, LinearLocator
     axes[0].yaxis.set_major_formatter(ScalarFormatter())
     axes[0].yaxis.set_minor_formatter(ScalarFormatter())
@@ -58,7 +66,7 @@ def draw_performance_graph(display_order_for_sqrt_n, title, filename):
     plt.legend([handles[idx] for idx in order],[one_word_labels[idx] for idx in order],bbox_to_anchor=(1.05, 1.0), loc='upper left')
 
     #save image
-    plt.savefig(filename)
+    plt.savefig(filename, metadata={'Date': None})
 
 draw_performance_graph([0, 8, 16, 4, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 18, 17, 3, 9, 15], "Integer SQRT performance on 6502 (all routines)", "result_all.svg")
 draw_performance_graph([0, 12, 2, 5, 6, 7, 13, 1, 10, 14, 11, 18, 17, 3, 9, 15], "Integer SQRT performance on 6502 (the non-slow routines)", "result_useful.svg")
@@ -119,16 +127,20 @@ bad_err = [[avg-min for (name,mem, good,max,min,avg) in bad_data],
            [max-avg for (name,mem, good,max,min,avg) in bad_data]]
 #print (good_data,good_err)
 # plot
+mpl.rcParams['svg.hashsalt'] = 'hello'
 fig, ax = plt.subplots(figsize=(10.5, 7))
-#plt.xscale("log",subs=[1.5,2,3,4,5,6,8])
-#plt.yscale("log",subs=[1.5,2,3,4,5,6,8])
-#plt.xlim([25,1100])
-plt.ylim([0, 1350])
+if log_plots:
+    plt.xscale("log",subs=[1.5,2,3,4,5,6,8])
+    plt.yscale("log",subs=[1.5,2,3,4,5,6,8])
+    plt.xlim([25,1100])
+else:
+    plt.ylim([0, 1350])
 from matplotlib.ticker import ScalarFormatter #,NullFormatter,LinearLocator
-#ax.yaxis.set_major_formatter(ScalarFormatter())
-#ax.yaxis.set_minor_formatter(ScalarFormatter())
-#ax.xaxis.set_major_formatter(ScalarFormatter())
-#ax.xaxis.set_minor_formatter(ScalarFormatter())
+if log_plots:
+    ax.yaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_minor_formatter(ScalarFormatter())
+    ax.xaxis.set_major_formatter(ScalarFormatter())
+    ax.xaxis.set_minor_formatter(ScalarFormatter())
 ax.xaxis.get_ticklocs(minor=True)
 ax.yaxis.get_ticklocs(minor=True)
 ax.minorticks_on()
@@ -167,4 +179,4 @@ for entry in data:
 #       ylim=(0, 8), yticks=np.arange(1, 8))
 
 plt.title("Memory vs speed (the non-slow routines)")
-plt.savefig("memory_vs_speed.svg")
+plt.savefig("memory_vs_speed.svg", metadata={'Date': None})
