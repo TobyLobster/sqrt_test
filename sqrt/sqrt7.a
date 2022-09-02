@@ -1,33 +1,37 @@
 ; http://6502org.wikidot.com/software-math-sqrt
+; Tweaked by tobylobster to be slightly smaller and faster
 
-NUML = $02
-NUMH = $03
-ROOT = $04
-REM  = $05
+numl = $02
+numh = $03
+root = $04
+loop_counter = $05
 
 * = $200
 
 start
-   LDA #0
-   STA ROOT
-   STA REM
-   LDX #8
-L1 SEC
-   LDA NUMH
-   SBC #$40
-   TAY
-   LDA REM
-   SBC ROOT
-   BCC L2
-   STY NUMH
-   STA REM
-L2 ROL ROOT
-   ASL NUML
-   ROL NUMH
-   ROL REM
-   ASL NUML
-   ROL NUMH
-   ROL REM
-   DEX
-   BNE L1
-   RTS
+    ldx #$ff
+    stx loop_counter
+    inx
+    stx root
+l1  sec
+    lda numh
+    sbc #$40
+    tay
+    txa
+    sbc root
+    bcc l2
+    sty numh
+    bcs l2a         ; always branch [could instead be 'tax' instead for a one byte saving at the cost of a few extra cycles]
+
+l2  txa
+l2a rol root
+    asl numl
+    rol numh
+    rol
+    asl numl
+    rol numh
+    rol
+    tax
+    lsr loop_counter
+    bne l1
+    rts

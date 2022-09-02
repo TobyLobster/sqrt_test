@@ -168,11 +168,11 @@ def task6_post(mon, symbols, v):
     return result
 
 def task7_pre(mon, symbols, v):
-    set_memory(mon, symbols["NUML"], v & 255)
-    set_memory(mon, symbols["NUMH"], v // 256)
+    set_memory(mon, symbols["numl"], v & 255)
+    set_memory(mon, symbols["numh"], v // 256)
 
 def task7_post(mon, symbols, v):
-    result = get_memory(mon, symbols["ROOT"])
+    result = get_memory(mon, symbols["root"])
     return result
 
 def task8_pre(mon, symbols, v):

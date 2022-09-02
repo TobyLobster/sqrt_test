@@ -18,7 +18,7 @@ All implementations have been sourced from the internet and reformatted for the 
 | sqrt4.a  | http://www.txbobsc.com/aal/1985/aal8506.html#a2                  | adds successive odd numbers                    |
 | sqrt5.a  | http://www.txbobsc.com/aal/1986/aal8609.html#a8                  |                                                |
 | sqrt6.a  | https://www.bbcelite.com/master/main/subroutine/ll5.html         | from the BBC Micro game Elite.                 |
-| sqrt7.a  | http://6502org.wikidot.com/software-math-sqrt                    |                                                |
+| sqrt7.a  | http://6502org.wikidot.com/software-math-sqrt                    | tweaked by me                                  |
 | sqrt8.a  | https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot                  | adds successive odd numbers                    |
 | sqrt9.a  | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a  | a table based solution, my version of sqrt3.a tweaked for performance. |
 | sqrt10.a | https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a | my version of sqrt1.a tweaked for performance. |
@@ -53,7 +53,7 @@ We see immediately that three of the algorithms are much slower compared to the 
 | sqrt4.a  |             36 |              7451 |              4989.1 |
 | sqrt5.a  |             67 |               766 |               731.0 |
 | sqrt6.a  |             55 |               574 |               522.9 |
-| sqrt7.a  |             42 |               519 |               501.5 |
+| sqrt7.a  |             41 |               503 |               492.5 |
 | sqrt8.a  |             37 |              9483 |              6342.4 |
 | sqrt9.a  |            847 |               129 |                39.8 |
 | sqrt10.a |            168 |               262 |               227.4 |
