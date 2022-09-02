@@ -1,5 +1,5 @@
 ; http://6502org.wikidot.com/software-math-sqrt
-; Tweaked by tobylobster to be slightly smaller and faster
+; Tweaked by tobylobster and 0xC0DE to be slightly smaller and faster
 
 numl = $02
 numh = $03
