@@ -13,18 +13,17 @@ start
     stx loop_counter
     inx
     stx root
-l1  sec
-    lda numh
+    sec
+l1  lda numh
     sbc #$40
     tay
     txa
     sbc root
     bcc l2
     sty numh
-    bcs l2a         ; always branch [could instead be 'tax' instead for a one byte saving at the cost of a few extra cycles]
-
+    !byte $90       ; 'bcc' opcode: never branches, just skips the next instruction ('txa') in 2 cycles
 l2  txa
-l2a rol root
+    rol root
     asl numl
     rol numh
     rol
