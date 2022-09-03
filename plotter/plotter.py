@@ -163,12 +163,16 @@ for entry in data:
     else:
         color = "lightgrey"
 
-    if entry[0] == "sqrt7":
-        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(4,-8), textcoords="offset points", color=color)
-    elif entry[0] == "sqrt3":
+    if entry[0] == "sqrt3":
         ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(-32,-2), textcoords="offset points", color=color)
     elif entry[0] == "sqrt5":
         ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(5,-4), textcoords="offset points", color=color)
+    elif entry[0] == "sqrt7":
+        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(4,-8), textcoords="offset points", color=color)
+    elif entry[0] == "sqrt10":
+        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(4,0), textcoords="offset points", color=color)
+    elif entry[0] == "sqrt13":
+        ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(4,3), textcoords="offset points", color=color)
     elif entry[0] == "sqrt16":
         ax.annotate(entry[0], xy=(entry[1], entry[5]), xytext=(-35,1), textcoords="offset points", color=color)
     else:
