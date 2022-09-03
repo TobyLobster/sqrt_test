@@ -45,6 +45,8 @@ We see immediately that three of the algorithms are much slower compared to the 
 
 ![SQRT Performance Comparison](./result_useful.svg)
 
+The straight line in the middle is sqrt7, which (remarkably) takes constant time.
+
 | file     | memory (bytes) | worst case cycles | average cycle count |
 | -------- | -------------: | ----------------: | ------------------: |
 | sqrt1.a  |             59 |               354 |               317.7 |
