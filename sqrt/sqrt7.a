@@ -1,10 +1,10 @@
 ; http://6502org.wikidot.com/software-math-sqrt
-; Tweaked by tobylobster and 0xC0DE to be slightly smaller and faster
+; Tweaked by tobylobster and 0xC0DE to be smaller and faster
 
 numl = $02
-numh = $03
+numh = $8A                  ; Memory location is opcode for 'txa'
+loop_counter = $03
 root = $04
-loop_counter = $05
 
 * = $200
 
@@ -19,10 +19,9 @@ l1  lda numh
     tay
     txa
     sbc root
-    bcc l2
+    bcc l2 + 1              ; Branches to the operand of the next instruction(!), which is 'txa'
+l2
     sty numh
-    !byte $90       ; 'bcc' opcode: never branches, just skips the next instruction ('txa') in 2 cycles
-l2  txa
     rol root
     asl numl
     rol numh
