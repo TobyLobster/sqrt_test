@@ -10,67 +10,67 @@ T = $05
 
 LL5
 
- LDY R                  ; Set (Y S) = (R Q)
- LDA Q
- STA S
+    ldy R               ; Set (Y S) = (R Q)
+    lda Q
+    sta S
 
                         ; So now to calculate Q = SQRT(Y S)
 
- LDX #0                 ; Set X = 0, to hold the remainder
+    ldx #0              ; Set X = 0, to hold the remainder
 
- STX Q                  ; Set Q = 0, to hold the result
+    stx Q               ; Set Q = 0, to hold the result
 
- LDA #8                 ; Set T = 8, to use as a loop counter
- STA T
+    lda #8              ; Set T = 8, to use as a loop counter
+    sta T
 
 LL6
 
- CPX Q                  ; If X < Q, jump to LL7
- BCC LL7
+    cpx Q               ; If X < Q, jump to LL7
+    bcc LL7
 
- BNE LL8                ; If X > Q, jump to LL8
+    bne LL8             ; If X > Q, jump to LL8
 
- CPY #64                ; If Y < 64, jump to LL7 with the C flag clear,
- BCC LL7                ; otherwise fall through into LL8 with the C flag set
+    cpy #64             ; If Y < 64, jump to LL7 with the C flag clear,
+    bcc LL7             ; otherwise fall through into LL8 with the C flag set
 
 LL8
 
- TYA                    ; Set Y = Y - 64
- SBC #64                ;
- TAY                    ; This subtraction will work as we know C is set from
+    tya                 ; Set Y = Y - 64
+    sbc #64             ;
+    tay                 ; This subtraction will work as we know C is set from
                         ; the BCC above, and the result will not underflow as we
                         ; already checked that Y >= 64, so the C flag is also
                         ; set for the next subtraction
 
- TXA                    ; Set X = X - Q
- SBC Q
- TAX
+    txa                 ; Set X = X - Q
+    sbc Q
+    tax
 
 LL7
 
- ROL Q                  ; Shift the result in Q to the left, shifting the C flag
+    rol Q               ; Shift the result in Q to the left, shifting the C flag
                         ; into bit 0 and bit 7 into the C flag
 
- ASL S                  ; Shift the dividend in (Y S) to the left, inserting
- TYA                    ; bit 7 from above into bit 0
- ROL
- TAY
+    asl S               ; Shift the dividend in (Y S) to the left, inserting
+    tya                 ; bit 7 from above into bit 0
+    rol
+    tay
 
- TXA                    ; Shift the remainder in X to the left
- ROL
- TAX
+    txa                 ; Shift the remainder in X to the left
+    rol
+    tax
 
- ASL S                  ; Shift the dividend in (Y S) to the left
- TYA
- ROL
- TAY
+    asl S               ; Shift the dividend in (Y S) to the left
+    tya
+    rol
+    tay
 
- TXA                    ; Shift the remainder in X to the left
- ROL
- TAX
+    txa                 ; Shift the remainder in X to the left
+    rol
+    tax
 
- DEC T                  ; Decrement the loop counter
+    dec T               ; Decrement the loop counter
 
- BNE LL6                ; Loop back to LL6 until we have done 8 loops
+    bne LL6             ; Loop back to LL6 until we have done 8 loops
 
- RTS                    ; Return from the subroutine
+    rts                 ; Return from the subroutine

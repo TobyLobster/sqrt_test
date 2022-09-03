@@ -1,66 +1,66 @@
 ; http://www.6502.org/source/integers/root.htm
 
-Numberl		= $F0		; number to find square root of low byte
-Numberh		= Numberl+1	; number to find square root of high byte
-Reml		= $F2		; remainder low byte
-Remh		= Reml+1	; remainder high byte
-templ		= $F4		; temp partial low byte
-temph		= templ+1	; temp partial high byte
-Root		= $F6		; square root
+Numberl     = $F0       ; number to find square root of low byte
+Numberh     = Numberl+1 ; number to find square root of high byte
+Reml        = $F2       ; remainder low byte
+Remh        = Reml+1    ; remainder high byte
+templ       = $F4       ; temp partial low byte
+temph       = templ+1   ; temp partial high byte
+Root        = $F6       ; square root
 
-	*= $8000		; can be anywhere, ROM or RAM
+    *= $8000            ; can be anywhere, ROM or RAM
 
 SqRoot
-	LDA	#$00		; clear A
-	STA	Reml		; clear remainder low byte
-	STA	Remh		; clear remainder high byte
-	STA	Root		; clear Root
-	LDX	#$08		; 8 pairs of bits to do
+    lda #$00            ; clear A
+    sta Reml            ; clear remainder low byte
+    sta Remh            ; clear remainder high byte
+    sta Root            ; clear Root
+    ldx #$08            ; 8 pairs of bits to do
 Loop
-	ASL	Root		; Root = Root * 2
+    asl Root            ; Root = Root * 2
 
-	ASL	Numberl		; shift highest bit of number ..
-	ROL	Numberh		;
-	ROL	Reml		; .. into remainder
-	ROL	Remh		;
+    asl Numberl         ; shift highest bit of number ..
+    rol Numberh         ;
+    rol Reml            ; .. into remainder
+    rol Remh            ;
 
-	ASL	Numberl		; shift highest bit of number ..
-	ROL	Numberh		;
-	ROL	Reml		; .. into remainder
-	ROL	Remh		;
+    asl Numberl         ; shift highest bit of number ..
+    rol Numberh         ;
+    rol Reml            ; .. into remainder
+    rol Remh            ;
 
-	LDA	Root		; copy Root ..
-	STA	templ		; .. to templ
-	LDA	#$00		; clear byte
-	STA	temph		; clear temp high byte
+    lda Root            ; copy Root ..
+    sta templ           ; .. to templ
+    lda #$00            ; clear byte
+    sta temph           ; clear temp high byte
 
-	SEC			; +1
-	ROL	templ		; temp = temp * 2 + 1
-	ROL	temph		;
+    sec                 ; +1
+    rol templ           ; temp = temp * 2 + 1
+    rol temph           ;
 
-	LDA	Remh		; get remainder high byte
-	CMP	temph		; comapre with partial high byte
-	BCC	Next		; skip sub if remainder high byte smaller
+    lda Remh            ; get remainder high byte
+    cmp temph           ; comapre with partial high byte
+    bcc Next            ; skip sub if remainder high byte smaller
 
-	BNE	Subtr		; do sub if <> (must be remainder>partial !)
+    bne Subtr           ; do sub if <> (must be remainder>partial !)
 
-	LDA	Reml		; get remainder low byte
-	CMP	templ		; comapre with partial low byte
-	BCC	Next		; skip sub if remainder low byte smaller
+    lda Reml            ; get remainder low byte
+    cmp templ           ; comapre with partial low byte
+    bcc Next            ; skip sub if remainder low byte smaller
 
-				; else remainder>=partial so subtract then
-				; and add 1 to root. carry is always set here
+                        ; else remainder>=partial so subtract then
+                        ; and add 1 to root. carry is always set here
 Subtr
-	LDA	Reml		; get remainder low byte
-	SBC	templ		; subtract partial low byte
-	STA	Reml		; save remainder low byte
-	LDA	Remh		; get remainder high byte
-	SBC	temph		; subtract partial high byte
-	STA	Remh		; save remainder high byte
+    lda Reml            ; get remainder low byte
+    sbc templ           ; subtract partial low byte
+    sta Reml            ; save remainder low byte
+    lda Remh            ; get remainder high byte
+    sbc temph           ; subtract partial high byte
+    sta Remh            ; save remainder high byte
 
-	INC	Root		; increment Root
+    inc Root            ; increment Root
 Next
-	DEX			; decrement bit pair count
-	BNE	Loop		; loop if not all done
+    dex                 ; decrement bit pair count
+    bne Loop            ; loop if not all done
 
-	RTS
+    rts

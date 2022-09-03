@@ -1,5 +1,5 @@
 ; http://6502org.wikidot.com/software-math-sqrt
-; Tweaked by tobylobster and 0xC0DE to be smaller and faster
+; Tweaked by TobyLobster and 0xC0DE to be smaller and faster
 
 numl = $02
 numh = $8A                  ; Memory location is opcode for 'txa'

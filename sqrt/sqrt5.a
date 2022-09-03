@@ -3,6 +3,7 @@
 ; SAVE S.INTEGER.SQRT
 ;       .LIST CON
 ; --------------------------------
+
 ARGLO  = $02
 ARGHI  = $03
 ROOT   = $04
@@ -12,47 +13,51 @@ WORKLO = $07
 WORKHI = $08
 ERRHI  = $09
 ERRLO  = $0a
+
 ; --------------------------------
 ;    METHOD DERIVED FROM 68000 CODE IN DDJ MAY 85
 ;       6502 VERSION AVERAGES 737 CYCLES
 ; --------------------------------
+
     * = $200
 
-SQR3   LDA ARGHI    ; Save working copy of argument
-       STA WORKHI
-       LDA ARGLO
-       STA WORKLO
-       LDA #0
-       STA ROOT     ; Start with ROOT = 0
-       STA ERRHI    ;        and ERR  = 0
-       STA ERRLO
-; --------------------------------
-       LDY #8       ; 8 pairs of bits in argument
-SQR3_1 ASL WORKLO   ; Two bits out of WORK into ERR
-       ROL WORKHI
-       ROL ERRLO
-       ROL ERRHI
-       ASL WORKLO
-       ROL WORKHI
-       ROL ERRLO
-       ROL ERRHI
-       ASL ROOT     ; ROOT = ROOT*2
-       LDA ROOT     ; BIT = ROOT*2
-       ASL
-       STA BITLO
-       LDA #0
-       ROL
-       STA BITHI
-       LDA ERRLO    ; (CARRY IS CLEAR)
-       SBC BITLO    ; COMPUTE:  ERR-BIT-1
-       TAX          ; SAVE LO DIFFERENCE
-       LDA ERRHI
-       SBC BITHI
-       BCC SQR3_2   ;     ERR < BIT
-       STA ERRHI
-       STX ERRLO
-       INC ROOT     ; ROOT = ROOT+1
-SQR3_2 DEY
-       BNE SQR3_1
-       RTS
-; --------------------------------
+SQR3
+    lda ARGHI                ; Save working copy of argument
+    sta WORKHI
+    lda ARGLO
+    sta WORKLO
+    lda #0
+    sta ROOT                 ; Start with ROOT = 0
+    sta ERRHI                ;        and ERR  = 0
+    sta ERRLO
+
+    ldy #8                   ; 8 pairs of bits in argument
+SQR3_1
+    asl WORKLO               ; Two bits out of WORK into ERR
+    rol WORKHI
+    rol ERRLO
+    rol ERRHI
+    asl WORKLO
+    rol WORKHI
+    rol ERRLO
+    rol ERRHI
+    asl ROOT                 ; ROOT = ROOT*2
+    lda ROOT                 ; BIT = ROOT*2
+    asl
+    sta BITLO
+    lda #0
+    rol
+    sta BITHI
+    lda ERRLO                ; (CARRY IS CLEAR)
+    sbc BITLO                ; COMPUTE:  ERR-BIT-1
+    tax                      ; SAVE LO DIFFERENCE
+    lda ERRHI
+    sbc BITHI
+    bcc SQR3_2               ;     ERR < BIT
+    sta ERRHI
+    stx ERRLO
+    inc ROOT                 ; ROOT = ROOT+1
+SQR3_2
+    dey
+    bne SQR3_1
+    rts

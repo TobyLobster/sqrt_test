@@ -7,7 +7,7 @@ arglo      =  $04                   ; 1 byte
 
 ; ***************************************************************************************
 ;
-; sqrt16
+; sqrt
 ;
 ; Heavily based on http://www.txbobsc.com/aal/1986/aal8611.html#a1
 ; but reformatted and tweaked to improve performance by TobyLobster
@@ -21,7 +21,7 @@ arglo      =  $04                   ; 1 byte
 ;   Y is result
 ;
 ; ***************************************************************************************
-sqrt16
+sqrt
     cpx #$2c                        ; value already 'normalised' (i.e. large enough)?
     bcs atleast11264                ; ...yes
 

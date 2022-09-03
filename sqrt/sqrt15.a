@@ -1,6 +1,6 @@
 ; from hexwab (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)
 
-tmp	  = $00
+tmp   = $00
 
 * = $200
 
@@ -10,102 +10,102 @@ tmp	  = $00
 ; cycles: best 19, avg 33.8, worst 87
 _start
 lt4
-	dex
-	bmi lo
-	lsr
-	lsr
-	ora tab2,X
-	tax
-	lda sqtab,X
-	bmi div8
-	tay
-	lda tmp
-	lsr
-	ror
-	ror
-	cmp stab-1,X
-	tya
-	adc #$80
-	bmi div8
+    dex
+    bmi lo
+    lsr
+    lsr
+    ora tab2,X
+    tax
+    lda sqtab,X
+    bmi div8
+    tay
+    lda tmp
+    lsr
+    ror
+    ror
+    cmp stab-1,X
+    tya
+    adc #$80
+    bmi div8
 preone
-	ldy #div2-bra-2
-	txa
-	bcs one
+    ldy #div2-bra-2
+    txa
+    bcs one
 no
-	sta tmp
-	cpx #$10
-	bcs preone
-	cpx #$04
-	bcc lt4
-	ldy #div4-bra-2
-	txa
-two	asl tmp
-	rol
-	asl tmp
-	rol
+    sta tmp
+    cpx #$10
+    bcs preone
+    cpx #$04
+    bcc lt4
+    ldy #div4-bra-2
+    txa
+two asl tmp
+    rol
+    asl tmp
+    rol
 one
-	asl tmp
-	rol
-	asl tmp
-	rol
-	sty bra+1
-	tax
-	lda sqtab-$40,X
+    asl tmp
+    rol
+    asl tmp
+    rol
+    sty bra+1
+    tax
+    lda sqtab-$40,X
         bmi bra
-	tay
-	lda tmp
-	cmp stab-$41,X
-	tya
-	adc #$80
-bra	bmi bra
+    tay
+    lda tmp
+    cmp stab-$41,X
+    tya
+    adc #$80
+bra bmi bra
 
 lo
- 	cmp #$40
- 	bcc nolo
- 	tax
- 	lda sqtab-$40,X
-	ora #$80
+    cmp #$40
+    bcc nolo
+    tax
+    lda sqtab-$40,X
+    ora #$80
 div16
- 	lsr
+    lsr
 div8
- 	lsr
+    lsr
 div4
- 	lsr
+    lsr
 div2
- 	lsr
+    lsr
 done
- 	rts
+    rts
 nolo
-	asl
- 	cmp #$20
- 	bcc nolo2
-	asl
-	tax
- 	lda sqtab-$40,X
-	lsr
-	ora #$40
-	bne div16
+    asl
+    cmp #$20
+    bcc nolo2
+    asl
+    tax
+    lda sqtab-$40,X
+    lsr
+    ora #$40
+    bne div16
 nolo2
-	tax
-	lda smalltab,X
-	rts
+    tax
+    lda smalltab,X
+    rts
 sqrt15
-	cpx #$40
-	bcc no
-	ldy sqtab-$40,X
-	bmi skip
-	cmp stab-$41,X
-	tya
-	adc #$80
-	rts
+    cpx #$40
+    bcc no
+    ldy sqtab-$40,X
+    bmi skip
+    cmp stab-$41,X
+    tya
+    adc #$80
+    rts
 
 XXX=$10 ; unused
 stab
         !byte     $01,$04,$09,$10,$19,$24,$31
         !byte $40,$51,$64,$79,$90,$a9,$c4,$e1
 skip
-	tya
-	rts
+    tya
+    rts
 
         !byte         $21,$44,$69,$90,$b9,$e4
         !byte XXX,$11,$40,$71,$a4,$d9,XXX,$10

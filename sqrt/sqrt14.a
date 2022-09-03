@@ -1,9 +1,9 @@
 ; from hexwab (https://stardot.org.uk/forums/viewtopic.php?p=367937#p367937)
 
-in_lo     = $02
-THI	  = $04
-MLO	  = $02
-MHI 	  = $03
+in_lo   = $02
+THI     = $04
+MLO     = $02
+MHI     = $03
 
 * = $200
 
@@ -12,167 +12,167 @@ MHI 	  = $03
 ; bytes: 205
 ; cycles: best 43, avg 194, worst 217
 sqrt14
-	txa
-	bne lo
+    txa
+    bne lo
 do_lo
-	lda in_lo
-	; fall through
+    lda in_lo
+    ; fall through
 lo
-	cmp #8*8
-	bcc a0
+    cmp #8*8
+    bcc a0
 a1
-	cmp #12*12
-	bcc a10
+    cmp #12*12
+    bcc a10
 a11
-	cmp #14*14
-	bcc a110
+    cmp #14*14
+    bcc a110
 a111
-	cmp #15*15
-	lda #7
-	bne resume
+    cmp #15*15
+    lda #7
+    bne resume
 a110
-	cmp #13*13
-	lda #6
-	bne resume
+    cmp #13*13
+    lda #6
+    bne resume
 a10
-	cmp #10*10
-	bcc a100
+    cmp #10*10
+    bcc a100
 a101
-	cmp #11*11
-	lda #5
-	bne resume
+    cmp #11*11
+    lda #5
+    bne resume
 a100
-	cmp #9*9
-	lda #4
-	bne resume
+    cmp #9*9
+    lda #4
+    bne resume
 a0
-	cmp #4*4
-	bcc a00
+    cmp #4*4
+    bcc a00
 a01
-	cmp #6*6
-	bcc a010
+    cmp #6*6
+    bcc a010
 a011
-	cmp #7*7
-	lda #3
-	bne resume
+    cmp #7*7
+    lda #3
+    bne resume
 a010
-	cmp #5*5
-	lda #2
-	bne resume
+    cmp #5*5
+    lda #2
+    bne resume
 a00
-	cmp #2*2
-	bcc a000
+    cmp #2*2
+    bcc a000
 a001
-	cmp #3*3
-	lda #1
-	bne resume
+    cmp #3*3
+    lda #1
+    bne resume
 a000
-	cmp #1*1
-	lda #0
+    cmp #1*1
+    lda #0
 resume
-	rol         ; A is small, so carry becomes clear
-	tay
-	; result should be $pq. we have $p0
-	txa
-	beq .skip3
+    rol         ; A is small, so carry becomes clear
+    tay
+    ; result should be $pq. we have $p0
+    txa
+    beq .skip3
 cont
-	sbc sqtab-1,Y
-	sta MHI
-	;lda in_lo
-	;sta MLO
-	tya
+    sbc sqtab-1,Y
+    sta MHI
+    ;lda in_lo
+    ;sta MLO
+    tya
         asl
         asl
         asl
         asl
-	tay ; R in Y
+    tay ; R in Y
 
-	lda MLO
-	 asl
-	 rol MHI
-	 asl
-	 rol MHI
-	 asl
-	 rol MHI
-	 asl
-	 rol MHI
-	 sta MLO
+    lda MLO
+     asl
+     rol MHI
+     asl
+     rol MHI
+     asl
+     rol MHI
+     asl
+     rol MHI
+     sta MLO
 
 
-	 TYA
-	 ORA #4
-	 STA THI     ; (R ASL 8) | (D ASL 7)
-	 LDA MHI
-	 BCS .skip00  ; M >= 65536? then T <= M is always true
-	 CMP THI
-	 BCC .skip10  ; T <= M
+     TYA
+     ORA #4
+     STA THI     ; (R ASL 8) | (D ASL 7)
+     LDA MHI
+     BCS .skip00  ; M >= 65536? then T <= M is always true
+     CMP THI
+     BCC .skip10  ; T <= M
 .skip00
-	 SBC THI
-	 STA MHI     ; M = M - T
-	 TYA
-	 ORA #8
-	 TAY         ; R = R OR D
+     SBC THI
+     STA MHI     ; M = M - T
+     TYA
+     ORA #8
+     TAY         ; R = R OR D
 .skip10
-	 ASL MLO
-	 ROL MHI     ; M = M ASL 1
+     ASL MLO
+     ROL MHI     ; M = M ASL 1
 
-	 TYA
-	 ORA #2
-	 STA THI     ; (R ASL 8) | (D ASL 7)
-	 LDA MHI
-	 BCS .skip01  ; M >= 65536? then T <= M is always true
-	 CMP THI
-	 BCC .skip11  ; T <= M
+     TYA
+     ORA #2
+     STA THI     ; (R ASL 8) | (D ASL 7)
+     LDA MHI
+     BCS .skip01  ; M >= 65536? then T <= M is always true
+     CMP THI
+     BCC .skip11  ; T <= M
 .skip01
-	 SBC THI
-	 ;STA MHI     ; M = M - T
-	 ;TYA
-	 ;ORA #4
-	 ;TAY         ; R = R OR D
-	 iny
-	 iny
-	 iny
-	 iny
+     SBC THI
+     ;STA MHI     ; M = M - T
+     ;TYA
+     ;ORA #4
+     ;TAY         ; R = R OR D
+     iny
+     iny
+     iny
+     iny
 .skip11
-	 ASL MLO
-	 ROL; MHI     ; M = M ASL 1
+     ASL MLO
+     ROL; MHI     ; M = M ASL 1
 
-	 ;TYA
-	 ;ORA #1
-	 ;STA THI     ; (R ASL 8) | (D ASL 7)
-	 iny
-	 sty THI
-	 dey
-	 ;LDA MHI
-	 BCS .skip02  ; M >= 65536? then T <= M is always true
-	 CMP THI
-	 BCC .skip12  ; T <= M
+     ;TYA
+     ;ORA #1
+     ;STA THI     ; (R ASL 8) | (D ASL 7)
+     iny
+     sty THI
+     dey
+     ;LDA MHI
+     BCS .skip02  ; M >= 65536? then T <= M is always true
+     CMP THI
+     BCC .skip12  ; T <= M
 .skip02
-	 SBC THI
-	 STA MHI     ; M = M - T
-	 iny
-	 iny
+     SBC THI
+     STA MHI     ; M = M - T
+     iny
+     iny
 .skip12
-	 ASL MLO
-	 ROL ;MHI     ; M = M ASL 1
+     ASL MLO
+     ROL ;MHI     ; M = M ASL 1
 
 
-	 ; last iteration
+     ; last iteration
 
-	 BCS .skip2
-	 STY THI
-;	 LDA MLO
-;	 CMP #$80
-;	 LDA MHI
-	 asl MLO
-	 SBC THI
-	 BCC .skip3
+     BCS .skip2
+     STY THI
+;    LDA MLO
+;    CMP #$80
+;    LDA MHI
+     asl MLO
+     SBC THI
+     BCC .skip3
 .skip2
-	 INY         ; R = R OR D (D is 1 here)
+     INY         ; R = R OR D (D is 1 here)
 .skip3
-	 tya
+     tya
 done
-	 RTS
+     RTS
 
 sqtab
     !byte 1-1,4-1,9-1,16-1,25-1,36-1,49-1,64-1,81-1,100-1,121-1,144-1,169-1,196-1,225-1

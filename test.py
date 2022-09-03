@@ -117,8 +117,8 @@ def run_task(name, codefile, start_symbol, pre, post, expect):
     return (file_size, cycles)
 
 def task1_pre(mon, symbols, v):
-    set_memory(mon, symbols["MLO"], v & 255)
-    set_memory(mon, symbols["MHI"], v // 256)
+    set_memory(mon, symbols["mlo"], v & 255)
+    set_memory(mon, symbols["mhi"], v // 256)
 
 def task1_post(mon, symbols, v):
     result = mon._mpu.y
@@ -273,7 +273,7 @@ add_task("sqrt6 (https://www.bbcelite.com/master/main/subroutine/ll5.html)", "sq
 add_task("sqrt7 (http://6502org.wikidot.com/software-math-sqrt)",     "sqrt/sqrt7.a", "start", task7_pre, task7_post, expect)
 #too slow!
 add_task("sqrt8 (https://mdfs.net/Info/Comp/6502/ProgTips/SqRoot)",     "sqrt/sqrt8.a", "sqr", task8_pre, task8_post, expect)
-add_task("sqrt9 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a)", "sqrt/sqrt9.a", "sqrt16", task9_pre, task9_post, expect)
+add_task("sqrt9 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt9.a)", "sqrt/sqrt9.a", "sqrt", task9_pre, task9_post, expect)
 add_task("sqrt10 (https://github.com/TobyLobster/sqrt_test/blob/main/sqrt/sqrt10.a)", "sqrt/sqrt10.a", "start", task10_pre, task10_post, expect)
 add_task("sqrt11 (http://forum.6502.org/viewtopic.php?p=90611#p90611)", "sqrt/sqrt11.a", "sqrt", task11_pre, task11_post, expect)
 add_task("sqrt12 (https://gitlab.riscosopen.org/RiscOS/Sources/Apps/Diversions/Meteors/-/blob/master/Srce6502/MetSrc2#L961)", "sqrt/sqrt12.a", "squareroot", task12_pre, task12_post, expect)
